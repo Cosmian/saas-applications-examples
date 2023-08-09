@@ -1,27 +1,34 @@
-# React + TypeScript + Vite
+# Cosmian for SaaS Applications - KMS + PKI Basics with CoverCrypt
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This documentation provides instructions on using KMS (Key Management System) combined with our attribute-based encryption scheme, Covercrypt.
+The relevant actions are documented in `/src/utils/actions.ts`.
 
-Currently, two official plugins are available:
+## Run the KMS Image
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To quickly start a Cosmian KMS server on http://localhost:9998 that stores its data inside the container, execute the following command:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+```
+docker run -p 9998:9998 --name kms ghcr.io/cosmian/kms:4.4.3
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Setting up Environment Variables
+
+Create a file named `.env` with the following variables:
+
+```
+VITE_AUTH0_DOMAIN="app.region.auth0.com"
+VITE_AUTH0_CUSTOM_DOMAIN="AUTH0_DOMAIN_CUSTOM_DOMAIN"
+VITE_AUTH0_CLIENT_ID="AUTH0_CLIENT_ID"
+VITE_BACKEND_URL="YOUR_BACKEND_URL_GOES_HERE"
+```
+
+## Running the User Interface (UI)
+
+Requires Node version 18 or higher.
+
+```
+docker-compose build
+docker-compose up
+```
+
+After the process is complete, open your browser and navigate to [http://localhost:3000](http://localhost:3000/).
