@@ -1,0 +1,17 @@
+version: "3"
+services:
+  backend:
+    container_name: kms
+    image: ghcr.io/cosmian/kms:4.4.3
+    ports:
+      - 9998:9998
+  frontend:
+    build:
+      dockerfile: Dockerfile
+      args:
+        - VITE_AUTH0_DOMAIN=${VITE_AUTH0_DOMAIN}
+        - VITE_AUTH0_CUSTOM_DOMAIN=${VITE_AUTH0_CUSTOM_DOMAIN}
+        - VITE_AUTH0_CLIENT_ID=${VITE_AUTH0_CLIENT_ID}
+        - VITE_BACKEND_URL=${VITE_BACKEND_URL}
+    ports:
+      - 3000:3000
