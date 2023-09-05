@@ -26,25 +26,34 @@ export const createPolicy = async (axis: PolicyAxisItem[]): Promise<Policy> => {
 //
 // Creating Keys
 //
-export const createCovercryptKeys = async (
+export const createCovercryptKeyPair = async (
   kmsToken: string,
   policy: Policy,
-  decryptionAccessPolicy: string,
   tags: string[] | undefined = undefined
-): Promise<KeysID> => {
+): Promise<KeyPair> => {
   // KMS Client
   const client = new KmsClient(BACKEND_URL, kmsToken);
 
   const masterKeys = await client.createCoverCryptMasterKeyPair(policy, tags);
   const masterSecretKeyUID = masterKeys[0];
   const masterPublicKeyUID = masterKeys[1];
-  const decryptionKeyUID = await client.createCoverCryptUserDecryptionKey(decryptionAccessPolicy, masterSecretKeyUID, tags);
 
   return {
     masterSecretKeyUID,
     masterPublicKeyUID,
-    decryptionKeyUID,
   };
+};
+
+export const createDecryptionKey = async (
+  kmsToken: string,
+  masterSecretKeyUID: string,
+  decryptionAccessPolicy: string,
+  tags: string[] | undefined = undefined
+): Promise<string> => {
+  const client = new KmsClient(BACKEND_URL, kmsToken);
+
+  const decryptionKeyUID = await client.createCoverCryptUserDecryptionKey(decryptionAccessPolicy, masterSecretKeyUID, tags);
+  return decryptionKeyUID;
 };
 
 export type EncryptedResult = { key: number; marketing: Uint8Array; hr: Uint8Array };
@@ -72,7 +81,7 @@ export const retrieveDecryptionKey = async (kmsToken: string, udkID: string): Pr
   return decryptionKey;
 };
 
-export const retrieveKeys = async (kmsToken: string, keysId: KeysID): Promise<KeysBytes> => {
+export const retrieveKeyKeyPair = async (kmsToken: string, keysId: KeyPair): Promise<KeysBytes> => {
   const client = new KmsClient(BACKEND_URL, kmsToken);
   const masterPublicKeyBytes = (await client.retrieveCoverCryptPublicMasterKey(keysId.masterPublicKeyUID)).bytes();
   const masterSecretKeyBytes = (await client.retrieveCoverCryptSecretMasterKey(keysId.masterSecretKeyUID)).bytes();
@@ -123,10 +132,9 @@ export const decryptDataInKms = async (encryptText: Uint8Array, kmsToken: string
 //
 // Types
 //
-export type KeysID = {
+export type KeyPair = {
   masterPublicKeyUID: string;
   masterSecretKeyUID: string;
-  decryptionKeyUID: string;
 };
 
 export type KeysBytes = {
