@@ -1,4 +1,4 @@
-# Cosmian for SaaS Applications - KMS + PKI Basics with CoverCrypt
+# Cosmian for SaaS Applications - KMS + PKI Basics with Covercrypt
 
 This documentation provides instructions on using KMS (Key Management System) combined with our attribute-based encryption scheme, Covercrypt.
 The relevant actions are documented in `/src/utils/actions.ts`.
@@ -8,7 +8,7 @@ The relevant actions are documented in `/src/utils/actions.ts`.
 To quickly start a Cosmian KMS server on http://localhost:9998 that stores its data inside the container, execute the following command:
 
 ```
-docker run -p 9998:9998 --name kms ghcr.io/cosmian/kms:4.4.3
+docker run -p 9998:9998 --name kms ghcr.io/cosmian/kms:4.5.0
 ```
 
 ## Setting up Environment Variables

@@ -26,14 +26,19 @@ export const createPolicy = async (axis: PolicyAxisItem[]): Promise<Policy> => {
 //
 // Creating Keys
 //
-export const createKeys = async (kmsToken: string, policy: Policy, decryptionAccessPolicy: string): Promise<KeysID> => {
+export const createCovercryptKeys = async (
+  kmsToken: string,
+  policy: Policy,
+  decryptionAccessPolicy: string,
+  tags: string[] | undefined = undefined
+): Promise<KeysID> => {
   // KMS Client
   const client = new KmsClient(BACKEND_URL, kmsToken);
 
-  const masterKeys = await client.createCoverCryptMasterKeyPair(policy);
+  const masterKeys = await client.createCoverCryptMasterKeyPair(policy, tags);
   const masterSecretKeyUID = masterKeys[0];
   const masterPublicKeyUID = masterKeys[1];
-  const decryptionKeyUID = await client.createCoverCryptUserDecryptionKey(decryptionAccessPolicy, masterSecretKeyUID);
+  const decryptionKeyUID = await client.createCoverCryptUserDecryptionKey(decryptionAccessPolicy, masterSecretKeyUID, tags);
 
   return {
     masterSecretKeyUID,
@@ -43,6 +48,20 @@ export const createKeys = async (kmsToken: string, policy: Policy, decryptionAcc
 };
 
 export type EncryptedResult = { key: number; marketing: Uint8Array; hr: Uint8Array };
+
+export const createSymmetricKey = async (kmsToken: string, tags: string[] | undefined = undefined): Promise<string> => {
+  const client = new KmsClient(BACKEND_URL, kmsToken);
+  return await client.createSymmetricKey(undefined, undefined, undefined, tags);
+};
+
+//
+// KMS locate
+///
+export const locateKeysByTags = async (kmsToken: string, tags: string[]): Promise<string[]> => {
+  const client = new KmsClient(BACKEND_URL, kmsToken);
+  const locatedKeysId = await client.getUniqueIdentifiersByTags(tags);
+  return locatedKeysId;
+};
 
 //
 // retrieve Keys
