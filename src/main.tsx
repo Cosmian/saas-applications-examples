@@ -2,7 +2,7 @@ import { AppState, Auth0Provider } from "@auth0/auth0-react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
-import { auth0_config } from "./utils/authConfig.ts";
+import { auth0_config } from "./utils/config.ts";
 
 import { ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 
