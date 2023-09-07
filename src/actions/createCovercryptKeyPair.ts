@@ -10,13 +10,8 @@ export const createCovercryptKeyPair = async (
   policy: Policy,
   tags: string[] | undefined = undefined
 ): Promise<KeyPair> => {
-  // KMS Client
   const client = new KmsClient(BACKEND_URL, kmsToken);
-
-  const masterKeys = await client.createCoverCryptMasterKeyPair(policy, tags);
-  const masterSecretKeyUID = masterKeys[0];
-  const masterPublicKeyUID = masterKeys[1];
-
+  const [masterSecretKeyUID, masterPublicKeyUID] = await client.createCoverCryptMasterKeyPair(policy, tags);
   return {
     masterSecretKeyUID,
     masterPublicKeyUID,
