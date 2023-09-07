@@ -3,6 +3,7 @@ import { Button, Center, Flex, Heading, Spinner, Tab, TabList, TabPanel, TabPane
 import { useEffect, useState } from "react";
 import CoverCrypt from "./CoverCrypt";
 import Layout from "./Layout";
+import PKI from "./PKI";
 
 const App = (): JSX.Element => {
   const [kmsToken, setKmsToken] = useState<undefined | string>();
@@ -68,10 +69,12 @@ const App = (): JSX.Element => {
             <Tabs isLazy>
               <TabList>
                 <Tab>Covercrypt & KMS actions</Tab>
+                <Tab>PKI actions</Tab>
               </TabList>
 
               <TabPanels marginBottom={12}>
                 <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
+                <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
               </TabPanels>
             </Tabs>
           </>

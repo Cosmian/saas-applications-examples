@@ -11,21 +11,13 @@ import {
   ListItem,
   OrderedList,
   Stack,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   UnorderedList,
   useToast,
 } from "@chakra-ui/react";
 import { Policy } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { CodeHigligter, HeadingWithCode } from "./Layout";
+import { CodeHigligter, EmployeeTable, EncryptedTable, HeadingWithCode } from "./Layout";
 import { createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
@@ -329,8 +321,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       <Heading as="h2" size="lg">
         Test KMS actions combined with our attribute-based encryption scheme: Covercrypt.
       </Heading>
-      {/* <Text fontSize="xl">Test KMS actions combined with our attribute-based encryption scheme: Covercrypt.</Text> */}
-
       <Heading as="h3" size="md">
         Example of use: employees database
       </Heading>
@@ -342,9 +332,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
         src={EmployeesDatabaseImage}
         alt="Employees database schema"
       />
-      <Image boxSize="100%" maxWidth={700} alignSelf={"center"} objectFit="cover" src={DatabaseSchema} alt="Database schema" />
 
-      <Flex flexDirection={"column"} gap="2">
+      <Stack spacing={3}>
         <Text fontSize="md">
           Consider the following 2 policy axes, Department and Country which data are partitioned by the following attributes:
         </Text>
@@ -360,7 +349,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <br />
           Decryption keys can decrypt a subset of the partitions defined by the policy.
         </Text>
-      </Flex>
+      </Stack>
+      <Image boxSize="100%" maxWidth={700} alignSelf={"center"} objectFit="cover" src={DatabaseSchema} alt="Database schema" />
 
       {kmsToken && (
         <>
@@ -512,63 +502,3 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 };
 
 export default CoverCrypt;
-
-const EmployeeTable: React.FC<{ data: Employee[]; caption?: string }> = ({ data, caption }) => {
-  const header = Object.keys(data[0]);
-  return (
-    <TableContainer maxWidth="100%">
-      <Table variant="simple" width="100%">
-        <Thead>
-          <Tr>
-            {header.map((key, index) => (
-              <Th key={index}>{key}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map((item, index) => {
-            return (
-              <Tr key={index}>
-                {Object.values(item).map((values, index) => (
-                  <Td key={index}>{values}</Td>
-                ))}
-              </Tr>
-            );
-          })}
-        </Tbody>
-        {caption && <TableCaption>{caption}</TableCaption>}
-      </Table>
-    </TableContainer>
-  );
-};
-
-const EncryptedTable: React.FC<{ data: EncryptedResult[]; caption?: string }> = ({ data, caption }) => {
-  const header = Object.keys(data[0]);
-  return (
-    <TableContainer>
-      <Table variant="simple" width={"100%"}>
-        <Thead>
-          <Tr>
-            {header.map((key, index) => (
-              <Th key={index}>{key}</Th>
-            ))}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {data.map((item, index) => {
-            return (
-              <Tr key={index}>
-                {Object.values(item).map((values, index) => (
-                  <Td key={index} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: 400 }}>
-                    {values}
-                  </Td>
-                ))}
-              </Tr>
-            );
-          })}
-        </Tbody>
-        {caption && <TableCaption>{caption}</TableCaption>}
-      </Table>
-    </TableContainer>
-  );
-};

@@ -1,6 +1,23 @@
-import { Box, Code, Container, Divider, Heading, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Code,
+  Container,
+  Divider,
+  Heading,
+  Table,
+  TableCaption,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  VStack,
+} from "@chakra-ui/react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atelierSulphurpoolDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { EncryptedResult } from "./actions/types";
+import { Employee } from "./utils/employees";
 
 const Layout = ({ children }: { children: JSX.Element }): JSX.Element => {
   return (
@@ -41,5 +58,65 @@ export const HeadingWithCode: React.FC<{ heading: string; code?: string | string
       {code && typeof code === "object" && code.map((item, i) => <Code key={i}>{item}</Code>)}
       {code && typeof code === "string" && <Code>{code}</Code>}
     </>
+  );
+};
+
+export const EmployeeTable: React.FC<{ data: Employee[]; caption?: string }> = ({ data, caption }) => {
+  const header = Object.keys(data[0]);
+  return (
+    <TableContainer maxWidth="100%">
+      <Table variant="simple" width="100%">
+        <Thead>
+          <Tr>
+            {header.map((key, index) => (
+              <Th key={index}>{key}</Th>
+            ))}
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.map((item, index) => {
+            return (
+              <Tr key={index}>
+                {Object.values(item).map((values, index) => (
+                  <Td key={index}>{values}</Td>
+                ))}
+              </Tr>
+            );
+          })}
+        </Tbody>
+        {caption && <TableCaption>{caption}</TableCaption>}
+      </Table>
+    </TableContainer>
+  );
+};
+
+export const EncryptedTable: React.FC<{ data: EncryptedResult[]; caption?: string }> = ({ data, caption }) => {
+  const header = Object.keys(data[0]);
+  return (
+    <TableContainer>
+      <Table variant="simple" width={"100%"}>
+        <Thead>
+          <Tr>
+            {header.map((key, index) => (
+              <Th key={index}>{key}</Th>
+            ))}
+          </Tr>
+        </Thead>
+        <Tbody>
+          {data.map((item, index) => {
+            return (
+              <Tr key={index}>
+                {Object.values(item).map((values, index) => (
+                  <Td key={index} style={{ textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap", maxWidth: 400 }}>
+                    {values}
+                  </Td>
+                ))}
+              </Tr>
+            );
+          })}
+        </Tbody>
+        {caption && <TableCaption>{caption}</TableCaption>}
+      </Table>
+    </TableContainer>
   );
 };
