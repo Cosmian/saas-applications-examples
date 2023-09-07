@@ -1,6 +1,5 @@
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import {
-  Box,
   Button,
   ButtonGroup,
   Center,
@@ -26,8 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { Policy } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { Jsoncode } from "./App";
-import { CodeHigligter } from "./Layout";
+import { CodeHigligter, HeadingWithCode } from "./Layout";
 import { createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
@@ -326,8 +324,15 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
   return (
     <Flex flexDirection={"column"} gap="8">
+      {/* INTRO */}
+
       <Heading as="h2" size="lg">
-        Example: employees database
+        Test KMS actions combined with our attribute-based encryption scheme: Covercrypt.
+      </Heading>
+      {/* <Text fontSize="xl">Test KMS actions combined with our attribute-based encryption scheme: Covercrypt.</Text> */}
+
+      <Heading as="h3" size="md">
+        Example of use: employees database
       </Heading>
       <Image
         boxSize="100%"
@@ -339,7 +344,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       />
       <Image boxSize="100%" maxWidth={700} alignSelf={"center"} objectFit="cover" src={DatabaseSchema} alt="Database schema" />
 
-      <Box>
+      <Flex flexDirection={"column"} gap="2">
         <Text fontSize="md">
           Consider the following 2 policy axes, Department and Country which data are partitioned by the following attributes:
         </Text>
@@ -347,19 +352,19 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <ListItem>Department: Marketing and HR</ListItem>
           <ListItem>Country: France, Spain and Germany</ListItem>
         </OrderedList>
+        <Text>Each pair (Department, Country) constitutes one of the XX=XX data partitions.</Text>
         <Text>
-          Each pair (Department, Country) constitutes one of the XX=XX data partitions.
-          <br />
           With Cosmian attribute-based encryption scheme, the encryption key is public. Encrypting systems (Spark, data engineering
           applications, ETLs, etc.) do not have to be secured and can directly hold the key, relaxing constraints on the infrastructure. The
           public key can encrypt for any partition defined by the policy.
           <br />
           Decryption keys can decrypt a subset of the partitions defined by the policy.
         </Text>
-      </Box>
+      </Flex>
 
       {kmsToken && (
         <>
+          <HeadingWithCode heading="Test KMS health with KMS version" code="/src/actions/testKmsVersion.ts" />
           {/* TEST KMS */}
           <CodeHigligter codeInput={code?.testKmsVersion} />
           <Button onClick={handleGetVersion} width="100%">
@@ -375,6 +380,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           {health && (
             <>
               {/* CREATE POLICY */}
+              <HeadingWithCode heading="Create policy" code="/src/actions/createPolicy.ts" />
               <CodeHigligter codeInput={code?.createPolicy} />
               <Button onClick={handleCreatePolicy}>Create policy</Button>
               {policy && (
@@ -383,11 +389,12 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                     <CheckCircleIcon color="green.500" />
                     OK, policy created:
                   </Center>
-                  <Jsoncode code={POLICY_AXIS} />
+                  <CodeHigligter codeInput={JSON.stringify(POLICY_AXIS, undefined, 2)} language={"json"} />
                 </>
               )}
 
               {/* CREATE SYMMETRIC KEY */}
+              <HeadingWithCode heading="Create Symmetric Key" code="/src/actions/createSymmetricKey.ts" />
               <CodeHigligter codeInput={code?.createSymmetricKey} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setSymmetricKeyInput(e.target.value)} />
@@ -402,6 +409,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* CREATE KEY PAIR */}
+              <HeadingWithCode heading="Create Covercrypt master Key Pair" code="/src/actions/createCovercryptKeyPair.ts" />
               <CodeHigligter codeInput={code?.createCovercryptKeyPair} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setCovercryptKeyInput(e.target.value)} />
@@ -419,6 +427,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* CREATE DECRYPTION KEY */}
+              <HeadingWithCode heading="Create Decryption Key with policy access" code="/src/actions/createDecryptionKey.ts" />
               <CodeHigligter codeInput={code?.createDecryptionKey} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setDecryptionKeyInput(e.target.value)} />
@@ -438,11 +447,12 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* LOCATE KEYS */}
+              <HeadingWithCode heading="Locate Keys by tag" code="/src/actions/locatedKeys.ts" />
               <CodeHigligter codeInput={code?.locatedKeys} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Tags separate with commas" onChange={(e) => setLocateKeyInput(e.target.value)} />
                 <Button onClick={locateKeys} width="50%">
-                  Locate symmetric key by tags
+                  Locate keys by tags
                 </Button>
               </Stack>
               {locatedKeys && locatedKeys.length > 0 && (
@@ -458,7 +468,10 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* ENCRYPT/DECRYPT IN BROWSER */}
+              <HeadingWithCode heading="Encrypt & Decrypt data in browser" />
+              <Code>/src/actions/encryptDataLocally.ts</Code>
               <CodeHigligter codeInput={code?.encryptDataLocally} />
+              <Code>/src/actions/decryptDataLocally.ts</Code>
               <CodeHigligter codeInput={code?.decryptDataLocally} />
               <ButtonGroup isAttached variant="outline" isDisabled={keyPair == null}>
                 <Button onClick={() => handleEncrypt({ browser: true })} width="50%">
@@ -474,8 +487,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {localClearData && <EmployeeTable caption={"Decrypted in browser"} data={localClearData} />}
 
               {/* ENCRYPT/DECRYPT IN KMS */}
-              <CodeHigligter codeInput={code?.encryptDataInKms} />
-              <CodeHigligter codeInput={code?.decryptDataInKms} />
+              <HeadingWithCode heading="Encrypt & Decrypt data in KMS" />
+              <Code>/src/actions/encryptDataLocally.ts</Code>
+              <CodeHigligter codeInput={code?.encryptDataLocally} />
+              <Code>/src/actions/encryptDataLocally.ts</Code>
+              <CodeHigligter codeInput={code?.encryptDataLocally} />
               <ButtonGroup isAttached variant="outline" isDisabled={keyPair == null}>
                 <Button onClick={() => handleEncrypt({ browser: false })} width="50%">
                   Encrypt data in KMS

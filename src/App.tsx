@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, Center, Code, Flex, Heading, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { Button, Center, Flex, Heading, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import CoverCrypt from "./CoverCrypt";
 import Layout from "./Layout";
@@ -57,11 +57,7 @@ const App = (): JSX.Element => {
         <Heading as="h1" size="2xl">
           Cosmian for Saas Applications
         </Heading>
-        <Text fontSize="xl">
-          Test KMS + PKI basics actions combined with our attribute-based encryption scheme: Covercrypt.
-          <br />
-          You can find documentation for all these actions in <Code>/src/utils/actions.ts</Code>.
-        </Text>
+        <Text fontSize="xl">Code samples for developers.</Text>
 
         {!isAuthenticated && <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>}
         {isAuthenticated && (
@@ -71,7 +67,7 @@ const App = (): JSX.Element => {
             </Button>
             <Tabs isLazy>
               <TabList>
-                <Tab>Covercrypt encryption/decryption</Tab>
+                <Tab>Covercrypt & KMS actions</Tab>
               </TabList>
 
               <TabPanels marginBottom={12}>
@@ -82,14 +78,6 @@ const App = (): JSX.Element => {
         )}
       </Flex>
     </Layout>
-  );
-};
-
-export const Jsoncode = ({ code }: { code: unknown }): JSX.Element => {
-  return (
-    <Box bg="orange.50" border="1px" borderColor="orange.100" color="gray.700" fontSize="sm" p="5">
-      <pre style={{}}>{JSON.stringify(code, undefined, 2)}</pre>
-    </Box>
   );
 };
 
