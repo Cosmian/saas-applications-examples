@@ -1,4 +1,4 @@
-import { AppState, Auth0Provider } from "@auth0/auth0-react";
+import { Auth0Provider, Auth0ProviderOptions } from "@auth0/auth0-react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
@@ -6,14 +6,9 @@ import { auth0_config } from "./utils/config.ts";
 
 import { ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 
-const onRedirectCallback = (_appState: AppState | undefined): void => {
-  window.location.replace(window.location.pathname);
-};
-
-const providerConfig = {
+const providerConfig: Auth0ProviderOptions = {
   domain: auth0_config.domain,
   clientId: auth0_config.client,
-  onRedirectCallback,
   authorizationParams: {
     redirect_uri: window.location.origin,
   },
