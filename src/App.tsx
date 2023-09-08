@@ -1,7 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button, Center, Flex, Heading, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { callbacksExamplesInMemory } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import CoverCrypt from "./CoverCrypt";
+import Findex from "./Findex";
 import Layout from "./Layout";
 import PKI from "./PKI";
 
@@ -9,6 +11,7 @@ const App = (): JSX.Element => {
   const [kmsToken, setKmsToken] = useState<undefined | string>();
 
   const { isLoading, error, user, loginWithRedirect, getIdTokenClaims, logout, isAuthenticated } = useAuth0();
+  const { fetchEntries, fetchChains, upsertEntries, insertChains } = callbacksExamplesInMemory();
 
   useEffect(() => {
     if (user) {
@@ -73,11 +76,22 @@ const App = (): JSX.Element => {
               <TabList>
                 <Tab>Covercrypt & KMS actions</Tab>
                 <Tab>PKI actions</Tab>
+                <Tab>Findex</Tab>
               </TabList>
 
               <TabPanels marginBottom={12}>
                 <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
                 <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
+                <TabPanel>
+                  {
+                    <Findex
+                      fetchEntries={fetchEntries}
+                      fetchChains={fetchChains}
+                      upsertEntries={upsertEntries}
+                      insertChains={insertChains}
+                    />
+                  }
+                </TabPanel>
               </TabPanels>
             </Tabs>
           </>
