@@ -310,8 +310,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     }
   };
 
-  console.log(code);
-
   // render
 
   return (

@@ -108,7 +108,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     <Flex flexDirection={"column"} gap="8">
       {/* INTRO */}
       <Heading as="h2" size="lg">
-        Distributing keys between clients with Cosmian PKI.
+        Distributing keys between clients with Cosmian PKI
       </Heading>
       <Stack spacing={3}>
         <Text>
@@ -126,11 +126,11 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             certificate in the SaaS PKI.
           </ListItem>
           <ListItem>
-            Client 1 recovers Client 2’s certificate then wraps (i.e., encrypts) the decryption key <Code>sk_a</Code> under the public key
+            Client 1 recovers Client 2’s certificate then wraps (i.e., encrypts) the decryption key <Code>sk_a</Code> under the public key{" "}
             <Code>pk_2</Code> and publishes the wrapped key in the SaaS PKI.{" "}
           </ListItem>
           <ListItem>
-            Client 2 recovers the wrapped key <Code>sk_a</Code> from the SaaS PKI and unwraps it (i.e., decrypts it) using its private key
+            Client 2 recovers the wrapped key <Code>sk_a</Code> from the SaaS PKI and unwraps it (i.e., decrypts it) using its private key{" "}
             <Code>sk_2</Code>.
           </ListItem>
         </OrderedList>
