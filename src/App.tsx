@@ -39,12 +39,15 @@ const App = (): JSX.Element => {
   }
 
   if (error) {
+    handleLogout();
     return (
       <>
         <Layout>
           <Center style={{ minHeight: "100vh" }}>
-            {error && <>Error</>}
-            <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>
+            <Flex direction="column" alignItems="center" gap={4}>
+              {error && <>Error</>}
+              <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>
+            </Flex>
           </Center>
         </Layout>
       </>
