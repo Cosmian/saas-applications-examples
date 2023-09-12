@@ -304,11 +304,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       const clearEmployee = clearMarketing.map((row, key) => {
         return {
           uuid: key,
-          first: row?.first != null ? row.first : "Fail to decrypt",
-          last: row?.last != null ? row.last : "Fail to decrypt",
-          country: row?.country != null ? row.country : "Fail to decrypt",
-          email: clearHR[key]?.email != null ? clearHR[key].email : "Fail to decrypt",
-          salary: clearHR[key]?.salary != null ? clearHR[key].salary : "Fail to decrypt",
+          first: row?.first != null ? row.first : "–",
+          last: row?.last != null ? row.last : "–",
+          country: row?.country != null ? row.country : "–",
+          email: clearHR[key]?.email != null ? clearHR[key].email : "–",
+          salary: clearHR[key]?.salary != null ? clearHR[key].salary : "–",
         };
       });
 
@@ -346,11 +346,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       const clearEmployee = clearMarketing.map((row, key) => {
         return {
           uuid: key,
-          first: row?.first != null ? row.first : "Fail to decrypt",
-          last: row?.last != null ? row.last : "Fail to decrypt",
-          country: row?.country != null ? row.country : "Fail to decrypt",
-          email: clearHR[key]?.email != null ? clearHR[key].email : "Fail to decrypt",
-          salary: clearHR[key]?.salary != null ? clearHR[key].salary : "Fail to decrypt",
+          first: row?.first != null ? row.first : "–",
+          last: row?.last != null ? row.last : "–",
+          country: row?.country != null ? row.country : "–",
+          email: clearHR[key]?.email != null ? clearHR[key].email : "–",
+          salary: clearHR[key]?.salary != null ? clearHR[key].salary : "–",
         };
       });
 
@@ -386,11 +386,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       const clearEmployee = clearMarketing.map((row, key) => {
         return {
           uuid: key,
-          first: row?.first != null ? row.first : "Fail to decrypt",
-          last: row?.last != null ? row.last : "Fail to decrypt",
-          country: row?.country != null ? row.country : "Fail to decrypt",
-          email: clearHR[key]?.email != null ? clearHR[key].email : "Fail to decrypt",
-          salary: clearHR[key]?.salary != null ? clearHR[key].salary : "Fail to decrypt",
+          first: row?.first != null ? row.first : "–",
+          last: row?.last != null ? row.last : "–",
+          country: row?.country != null ? row.country : "–",
+          email: clearHR[key]?.email != null ? clearHR[key].email : "–",
+          salary: clearHR[key]?.salary != null ? clearHR[key].salary : "–",
         };
       });
 

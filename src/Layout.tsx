@@ -1,5 +1,7 @@
+import { CheckIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Code,
   Container,
   Divider,
@@ -14,6 +16,7 @@ import {
   Tr,
   VStack,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atelierSulphurpoolDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { EncryptedResult } from "./actions/types";
@@ -32,11 +35,37 @@ const Layout = ({ children }: { children: JSX.Element }): JSX.Element => {
 export default Layout;
 
 export const CodeHigligter: React.FC<{ codeInput: string | undefined; language?: string }> = ({ codeInput, language }) => {
+  const [copied, setCopied] = useState(false);
+
   if (codeInput == null) return <></>;
+
+  const handleCopy = (): void => {
+    navigator.clipboard.writeText(codeInput);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
   return (
-    <SyntaxHighlighter language={language ? language : "typescript"} style={atelierSulphurpoolDark} showLineNumbers>
-      {codeInput}
-    </SyntaxHighlighter>
+    <Box textAlign="right">
+      <Button
+        leftIcon={copied ? <CheckIcon /> : undefined}
+        size="xs"
+        colorScheme="whiteAlpha"
+        position="relative"
+        top="30px"
+        right="5px"
+        onClick={handleCopy}
+      >
+        {copied ? "Copied" : "Copy"}
+      </Button>
+      <SyntaxHighlighter
+        language={language ? language : "typescript"}
+        style={atelierSulphurpoolDark}
+        showLineNumbers
+        customStyle={{ textAlign: "left" }}
+      >
+        {codeInput}
+      </SyntaxHighlighter>
+    </Box>
   );
 };
 
