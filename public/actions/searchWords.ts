@@ -1,5 +1,8 @@
 import { FetchChains, FetchEntries, Findex, FindexKey, Label } from "cloudproof_js";
 
+//
+// Search a list of words
+//
 export const searchWords = async (
   masterKey: FindexKey,
   label: Label,

@@ -5,6 +5,9 @@ export interface IndexedEntry {
   keywords: Set<Keyword> | Keyword[] | string[];
 }
 
+//
+// Index your data
+//
 export const upsertData = async (
   masterKey: FindexKey,
   label: Label,
