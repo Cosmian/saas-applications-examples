@@ -19,13 +19,14 @@ import {
 } from "@chakra-ui/react";
 import { FetchChains, FetchEntries, FindexKey, InsertChains, Label, Location, UpsertEntries } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { CodeHigligter, HeadingWithCode } from "./Layout";
+import { CodeHighlighter, HeadingWithCode } from "./Layout";
 import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
 import FindexSchema from "./assets/Findex.png";
-import { employees } from "./utils/employees";
+import EmployeesDatabaseImage from "./assets/employees-database-basic.png";
+import { Employee, employees } from "./utils/employees";
 
 type CodeContent = {
   [key: string]: string;
@@ -42,6 +43,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
   const [code, setCode] = useState<CodeContent>();
   const [findexKey, setFindexKey] = useState<undefined | FindexKey>(undefined);
   const [label, setLabel] = useState<undefined | Label>(undefined);
+  const [inputLabel, setInputLabel] = useState<undefined | string>(undefined);
   const [inputWords, setInputWords] = useState<string[] | null>(null);
   const [results, setResults] = useState<Employee[] | null>(null);
 
@@ -81,7 +83,9 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
   const handleDefineLabel = async (): Promise<void> => {
     try {
-      setLabel(defineLabel());
+      if (inputLabel) {
+        setLabel(defineLabel(inputLabel));
+      }
     } catch (error) {
       toastError(error);
     }
@@ -117,8 +121,10 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
     try {
       if (findexKey && label && inputWords) {
         const res = await searchWords(findexKey, label, inputWords, fetchEntries, fetchChains);
-        const resultEmployees = res.map((result) => employees.find((employee) => result.toNumber() === employee.uuid));
-        setResults(resultEmployees);
+        const resultEmployees = res
+          .map((result) => employees.find((employee) => result.toNumber() === employee.uuid))
+          .filter((employee) => employee);
+        setResults(resultEmployees as Employee[]);
       }
     } catch (error) {
       toastError(error);
@@ -138,13 +144,13 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           content of the index, the queries, or the responses, one can use Zero-Trust environments, such as the public cloud, to store the
           indexes.
         </Text>
-        <Image boxSize="100%" maxWidth={600} alignSelf={"center"} objectFit="cover" src={FindexSchema} alt="Findex schema" />
+        <Image boxSize="100%" maxWidth={900} alignSelf={"center"} objectFit="cover" src={FindexSchema} alt="Findex schema" />
       </Stack>
       <Stack spacing={3}>
         {/* CREATE FINDEX KEY */}
         <HeadingWithCode heading="Generate Findex key" code="/src/actions/createFindexKey.ts" />
         <Text>Findex uses a single symmetric 128 bit key to upsert and search. Encryption is performed using AES 128 GCM.</Text>
-        <CodeHigligter codeInput={code?.createFindexKey} />
+        <CodeHighlighter codeInput={code?.createFindexKey} />
         <Button onClick={handleCreateFindexKey} width="100%">
           Create Findex key
         </Button>
@@ -163,10 +169,19 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           “Q1 2022”. It should be changed when the index is compacted or recreated. Changing it regularly significantly increases the
           difficulty of performing statistical attacks.
         </Text>
-        <CodeHigligter codeInput={code?.defineLabel} />
-        <Button onClick={handleDefineLabel} width="100%">
-          Define Label
-        </Button>
+        <CodeHighlighter codeInput={code?.defineLabel} />
+        <Stack spacing={5} direction="row">
+          <Input
+            width="50%"
+            placeholder="Label"
+            onChange={(e) => {
+              setInputLabel(e.target.value);
+            }}
+          />
+          <Button onClick={handleDefineLabel} width="50%">
+            Define Label
+          </Button>
+        </Stack>
         {label && (
           <Center gap="2">
             <CheckCircleIcon color="green.500" />
@@ -183,11 +198,10 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           tables: the Entry table and the Chain table. Both have two columns: uid and value.
         </Text>
         <Text>
-          {" "}
-          To keep it simple here, we can use default callbacks available in cloudproof_js to fetch and upstert elements in both tables - in
-          memory.
+          To keep it simple here, we can use default callbacks available in <b>cloudproof_js</b> to fetch and upstert elements in both
+          tables - in memory.
         </Text>
-        <CodeHigligter codeInput={code?.defineCallbacks} />
+        <CodeHighlighter codeInput={code?.defineCallbacks} />
       </Stack>
       <Stack spacing={3}>
         {/* UPSERT DATA */}
@@ -196,8 +210,17 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           To perform insertions or updates (a.k.a upserts), supply an array of IndexedEntry. This structure maps an IndexedValue to a list
           of Keywords.
         </Text>
-        <Text>Its definition is :</Text>
-        <CodeHigligter codeInput={code?.upsertData} />
+        <Text>Its definition is:</Text>
+        <CodeHighlighter codeInput={code?.upsertData} />
+        <Text>In this example we will index employees database:</Text>
+        <Image
+          boxSize="100%"
+          maxWidth={900}
+          alignSelf={"center"}
+          objectFit="cover"
+          src={EmployeesDatabaseImage}
+          alt="Employees database schema"
+        />
         <Button onClick={handleUpsertData} width="100%" isDisabled={!findexKey || !label}>
           Index database
         </Button>
@@ -206,16 +229,19 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         {/* SEARCH DATA */}
         <HeadingWithCode heading="Search words" code="/src/actions/searchWords.ts" />
         <Text>Querying the index is performed using the search function.</Text>
-        <CodeHigligter codeInput={code?.searchWords} />
-        <Input
-          placeholder="Words to search - ex: Susan"
-          onChange={(e) => {
-            setInputWords(e.target.value.split(" ").map((word) => word.toLowerCase()));
-          }}
-        />
-        <Button onClick={handleSearchWords} width="100%" isDisabled={!findexKey || !label}>
-          Search in database
-        </Button>
+        <CodeHighlighter codeInput={code?.searchWords} />
+        <Stack spacing={5} direction="row">
+          <Input
+            width="50%"
+            placeholder="Words to search - ex: Susan"
+            onChange={(e) => {
+              setInputWords(e.target.value.split(" ").map((word) => word.toLowerCase()));
+            }}
+          />
+          <Button onClick={handleSearchWords} width="50%" isDisabled={!findexKey || !label}>
+            Search in database
+          </Button>
+        </Stack>
         <Stack>
           <TableContainer>
             <Table variant="simple">

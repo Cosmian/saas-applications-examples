@@ -1,6 +1,6 @@
 import { FetchEntries, Findex, FindexKey, IndexedValue, InsertChains, Keyword, Label, Location, UpsertEntries } from "cloudproof_js";
 
-export interface IndexedEntry {
+interface IndexedEntry {
   indexedValue: IndexedValue | Location | Keyword;
   keywords: Set<Keyword> | Keyword[] | string[];
 }
