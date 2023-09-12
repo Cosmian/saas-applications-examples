@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Policy } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { CodeHigligter, EmployeeTable, EncryptedTable, HeadingWithCode } from "./Layout";
+import { CodeHighlighter, HeadingWithCode } from "./Layout";
 import { createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
@@ -31,9 +31,10 @@ import { locateKeysByTags } from "./actions/locateKeysByTag";
 import { retrieveDecryptionKey } from "./actions/retrieveDecryptionKey";
 import { retrieveKeyPair } from "./actions/retrieveKeyPair";
 import { getKmsVersion } from "./actions/testKmsVersion";
-import { EncryptedResult, KeyPair, PolicyAxisItem } from "./actions/types";
+import { EncryptedResult, KeysId, PolicyAxisItem } from "./actions/types";
 import DatabaseSchema from "./assets/db-schema.png";
 import EmployeesDatabaseImage from "./assets/employees-database.png";
+import { EmployeeTable, EncryptedTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
 export const POLICY_AXIS: PolicyAxisItem[] = [
@@ -63,8 +64,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const [kmsVersion, setKmsVersion] = useState<undefined | string>();
   const [policy, setPolicy] = useState<undefined | Policy>();
   // keys
-  const [keyPair, setKeyPair] = useState<undefined | KeyPair>();
-  const [decryptionKey, setDecryptionKey] = useState<undefined | string>();
+  const [keyPair, setKeyPair] = useState<undefined | KeysId>();
+  const [decryptionKeyId, setDecryptionKeyId] = useState<undefined | string>();
   const [symmetricKeyId, setSymmetricKeyId] = useState<string | null>(null);
   const [locatedKeys, setLocatedKeys] = useState<string[] | null>(null);
 
@@ -182,7 +183,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
         let tags: string[] | undefined;
         if (decryptionKeyInput) tags = decryptionKeyInput.replace(/ /g, "").split(",");
         const decryptionAccessPolicy = ACCESS_POLICY;
-        setDecryptionKey(await createDecryptionKey(kmsToken, keyPair.masterSecretKeyUID, decryptionAccessPolicy, tags));
+        setDecryptionKeyId(await createDecryptionKey(kmsToken, keyPair.masterSecretKeyUID, decryptionAccessPolicy, tags));
       }
     } catch (error) {
       toastError(error);
@@ -276,8 +277,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   };
 
   const handleDecryptLocally = async (): Promise<void> => {
-    if (localEncryptedData && decryptionKey) {
-      const retrievedDecryptionKey = await retrieveDecryptionKey(kmsToken, decryptionKey as string);
+    if (localEncryptedData && decryptionKeyId) {
+      const retrievedDecryptionKey = await retrieveDecryptionKey(kmsToken, decryptionKeyId as string);
       const clearMarketing: Employee[] = await Promise.all(
         localEncryptedData.map(async (row) => {
           try {
@@ -317,53 +318,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     }
   };
   const handleDecryptInKms = async (): Promise<void> => {
-    // BROWSER
-    if (localEncryptedData && decryptionKey) {
-      const retrievedDecryptionKey = await retrieveDecryptionKey(kmsToken, decryptionKey as string);
-      const clearMarketing: Employee[] = await Promise.all(
-        localEncryptedData.map(async (row) => {
-          try {
-            const marketing = await decryptDataLocally(row.marketing, retrievedDecryptionKey.bytes());
-            const decryptedMarketing = JSON.parse(marketing);
-            return decryptedMarketing;
-          } catch {
-            //
-          }
-        })
-      );
-      const clearHR: Employee[] = await Promise.all(
-        localEncryptedData.map(async (row) => {
-          try {
-            const hr = await decryptDataLocally(row.hr, retrievedDecryptionKey.bytes());
-            const decryptedHR = JSON.parse(hr);
-            return decryptedHR;
-          } catch {
-            //
-          }
-        })
-      );
-
-      const clearEmployee = clearMarketing.map((row, key) => {
-        return {
-          uuid: key,
-          first: row?.first != null ? row.first : "–",
-          last: row?.last != null ? row.last : "–",
-          country: row?.country != null ? row.country : "–",
-          email: clearHR[key]?.email != null ? clearHR[key].email : "–",
-          salary: clearHR[key]?.salary != null ? clearHR[key].salary : "–",
-        };
-      });
-
-      setLocalClearData(clearEmployee as Employee[]);
-      setLocalEncryptedData(undefined);
-    }
-
-    // KMS
-    if (kmsEncryptedData && decryptionKey) {
+    if (kmsEncryptedData && decryptionKeyId) {
       const clearMarketing: Employee[] = await Promise.all(
         kmsEncryptedData.map(async (row) => {
           try {
-            const marketing = await decryptDataInKms(row.marketing, kmsToken, decryptionKey);
+            const marketing = await decryptDataInKms(row.marketing, kmsToken, decryptionKeyId);
             const decryptedMarketing = JSON.parse(marketing);
             return decryptedMarketing;
           } catch {
@@ -374,9 +333,9 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       const clearHR: Employee[] = await Promise.all(
         kmsEncryptedData.map(async (row) => {
           try {
-            const hr = await decryptDataInKms(row.hr, kmsToken, decryptionKey);
-            const decryptedHR = JSON.parse(hr);
-            return decryptedHR;
+            const hr = await decryptDataInKms(row.hr, kmsToken, decryptionKeyId);
+            const decryptedHr = JSON.parse(hr);
+            return decryptedHr;
           } catch {
             //
           }
@@ -443,7 +402,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
         <>
           <HeadingWithCode heading="Test KMS health with KMS version" code="/src/actions/testKmsVersion.ts" />
           {/* TEST KMS */}
-          <CodeHigligter codeInput={code?.testKmsVersion} />
+          <CodeHighlighter codeInput={code?.testKmsVersion} />
           <Button onClick={handleGetVersion} width="100%">
             Test KMS version
           </Button>
@@ -458,7 +417,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             <>
               {/* CREATE POLICY */}
               <HeadingWithCode heading="Create policy" code="/src/actions/createPolicy.ts" />
-              <CodeHigligter codeInput={code?.createPolicy} />
+              <CodeHighlighter codeInput={code?.createPolicy} />
               <Button onClick={handleCreatePolicy}>Create policy</Button>
               {policy && (
                 <>
@@ -466,13 +425,13 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                     <CheckCircleIcon color="green.500" />
                     OK, policy created:
                   </Center>
-                  <CodeHigligter codeInput={JSON.stringify(POLICY_AXIS, undefined, 2)} language={"json"} />
+                  <CodeHighlighter codeInput={JSON.stringify(POLICY_AXIS, undefined, 2)} language={"json"} />
                 </>
               )}
 
               {/* CREATE SYMMETRIC KEY */}
               <HeadingWithCode heading="Create Symmetric Key" code="/src/actions/createSymmetricKey.ts" />
-              <CodeHigligter codeInput={code?.createSymmetricKey} />
+              <CodeHighlighter codeInput={code?.createSymmetricKey} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setSymmetricKeyInput(e.target.value)} />
                 <Button onClick={createSymmetrickKey} width="50%">
@@ -487,7 +446,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* CREATE KEY PAIR */}
               <HeadingWithCode heading="Create Covercrypt master Key Pair" code="/src/actions/createCovercryptKeyPair.ts" />
-              <CodeHigligter codeInput={code?.createCovercryptKeyPair} />
+              <CodeHighlighter codeInput={code?.createCovercryptKeyPair} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setCovercryptKeyInput(e.target.value)} />
                 {policy == null ? (
@@ -513,7 +472,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* CREATE DECRYPTION KEY */}
               <HeadingWithCode heading="Create Decryption Key with policy access" code="/src/actions/createDecryptionKey.ts" />
-              <CodeHigligter codeInput={code?.createDecryptionKey} />
+              <CodeHighlighter codeInput={code?.createDecryptionKey} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setDecryptionKeyInput(e.target.value)} />
                 {policy == null ? (
@@ -528,20 +487,20 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                   </Button>
                 )}
               </Stack>
-              {decryptionKey && (
+              {decryptionKeyId && (
                 <UnorderedList>
                   <ListItem>
                     Access policy: <Code>{ACCESS_POLICY}</Code>
                   </ListItem>
                   <ListItem>
-                    decryptionKey: <Code>{decryptionKey}</Code>
+                    decryptionKey: <Code>{decryptionKeyId}</Code>
                   </ListItem>
                 </UnorderedList>
               )}
 
               {/* LOCATE KEYS */}
               <HeadingWithCode heading="Locate Keys by tag" code="/src/actions/locatedKeys.ts" />
-              <CodeHigligter codeInput={code?.locatedKeys} />
+              <CodeHighlighter codeInput={code?.locatedKeys} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Tags separate with commas" onChange={(e) => setLocateKeyInput(e.target.value)} />
                 <Button onClick={locateKeys} width="50%">
@@ -563,9 +522,9 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {/* ENCRYPT/DECRYPT IN BROWSER */}
               <HeadingWithCode heading="Encrypt & Decrypt data in browser" />
               <Code>/src/actions/encryptDataLocally.ts</Code>
-              <CodeHigligter codeInput={code?.encryptDataLocally} />
+              <CodeHighlighter codeInput={code?.encryptDataLocally} />
               <Code>/src/actions/decryptDataLocally.ts</Code>
-              <CodeHigligter codeInput={code?.decryptDataLocally} />
+              <CodeHighlighter codeInput={code?.decryptDataLocally} />
               <ButtonGroup isAttached variant="outline" isDisabled={keyPair == null}>
                 <Button onClick={() => handleEncrypt({ browser: true })} width="50%">
                   Encrypt data in browser
@@ -582,9 +541,9 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {/* ENCRYPT/DECRYPT IN KMS */}
               <HeadingWithCode heading="Encrypt & Decrypt data in KMS" />
               <Code>/src/actions/encryptDataInKms.ts</Code>
-              <CodeHigligter codeInput={code?.encryptDataInKms} />
-              <Code>/src/actions/decryptDataLocally.ts</Code>
-              <CodeHigligter codeInput={code?.decryptDataLocally} />
+              <CodeHighlighter codeInput={code?.encryptDataInKms} />
+              <Code>/src/actions/decryptDataInKms.ts</Code>
+              <CodeHighlighter codeInput={code?.decryptDataInKms} />
               <ButtonGroup isAttached variant="outline" isDisabled={keyPair == null}>
                 <Button onClick={() => handleEncrypt({ browser: false })} width="50%">
                   Encrypt data in KMS

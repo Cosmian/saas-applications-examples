@@ -1,14 +1,15 @@
 import { Button, Code, Flex, Heading, Image, ListItem, OrderedList, Stack, Text, UnorderedList, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ACCESS_POLICY, POLICY_AXIS } from "./CoverCrypt";
-import { EncryptedTable, HeadingWithCode } from "./Layout";
+import { HeadingWithCode } from "./Layout";
 import { createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
 import { encryptDataInKms } from "./actions/encryptDataInKms";
 import { getKmsVersion } from "./actions/testKmsVersion";
-import { EncryptedResult, KeyPair } from "./actions/types";
+import { EncryptedResult, KeysId } from "./actions/types";
 import PkiDrawIo from "./assets/pki.drawio.svg";
+import { EncryptedTable } from "./components/Table";
 import { employees } from "./utils/employees";
 
 const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
@@ -18,8 +19,8 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const [health, setHealth] = useState<undefined | string>();
 
   // keys
-  const [clientOneKeyPair, setClientOneKeyPair] = useState<undefined | KeyPair>();
-  const [clientTwoKeyPair, setClientTwoKeyPair] = useState<undefined | KeyPair>();
+  const [clientOneKeyPair, setClientOneKeyPair] = useState<undefined | KeysId>();
+  const [clientTwoKeyPair, setClientTwoKeyPair] = useState<undefined | KeysId>();
   const [clientOnedecryptionKey, setClientOneDecryptionKey] = useState<undefined | string>();
 
   // data

@@ -1,7 +1,7 @@
 //
 // Types
 //
-export type KeyPair = {
+export type KeysId = {
   masterPublicKeyUID: string;
   masterSecretKeyUID: string;
 };

@@ -7,9 +7,9 @@ export const encryptDataLocally = async (
   publicKey: Uint8Array,
   policy: Policy,
   accessPolicy: string,
-  dataToEncrypt: Uint8Array
+  clearData: Uint8Array
 ): Promise<Uint8Array> => {
   const { CoverCryptHybridEncryption } = await CoverCrypt();
   const encryption = new CoverCryptHybridEncryption(policy, publicKey);
-  return encryption.encrypt(accessPolicy, dataToEncrypt);
+  return encryption.encrypt(accessPolicy, clearData);
 };
