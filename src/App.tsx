@@ -1,14 +1,17 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Box, Button, Center, Code, Flex, Heading, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { Button, Center, Flex, Heading, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { callbacksExamplesInMemory } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import CoverCrypt from "./CoverCrypt";
+import Findex from "./Findex";
 import Layout from "./Layout";
-import Tags from "./Tags";
+import PKI from "./PKI";
 
 const App = (): JSX.Element => {
   const [kmsToken, setKmsToken] = useState<undefined | string>();
 
   const { isLoading, error, user, loginWithRedirect, getIdTokenClaims, logout, isAuthenticated } = useAuth0();
+  const { fetchEntries, fetchChains, upsertEntries, insertChains } = callbacksExamplesInMemory();
 
   useEffect(() => {
     if (user) {
@@ -39,12 +42,15 @@ const App = (): JSX.Element => {
   }
 
   if (error) {
+    handleLogout();
     return (
       <>
         <Layout>
           <Center style={{ minHeight: "100vh" }}>
-            {error && <>Error</>}
-            <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>
+            <Flex direction="column" alignItems="center" gap={4}>
+              {error && <>Error</>}
+              <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>
+            </Flex>
           </Center>
         </Layout>
       </>
@@ -58,11 +64,7 @@ const App = (): JSX.Element => {
         <Heading as="h1" size="2xl">
           Cosmian for Saas Applications
         </Heading>
-        <Text fontSize="xl">
-          Test KMS + PKI basics actions combined with our attribute-based encryption scheme: Covercrypt.
-          <br />
-          You can find documentation for all these actions in <Code>/src/utils/actions.ts</Code>.
-        </Text>
+        <Text fontSize="xl">Code samples for developers.</Text>
 
         {!isAuthenticated && <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>}
         {isAuthenticated && (
@@ -72,27 +74,30 @@ const App = (): JSX.Element => {
             </Button>
             <Tabs isLazy>
               <TabList>
-                <Tab>Covercrypt encryption/decryption</Tab>
-                <Tab>Locate keys with tags</Tab>
+                <Tab>Covercrypt & KMS actions</Tab>
+                <Tab>PKI actions</Tab>
+                <Tab>Findex</Tab>
               </TabList>
 
               <TabPanels marginBottom={12}>
                 <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
-                <TabPanel>{kmsToken && <Tags kmsToken={kmsToken} />}</TabPanel>
+                <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
+                <TabPanel>
+                  {
+                    <Findex
+                      fetchEntries={fetchEntries}
+                      fetchChains={fetchChains}
+                      upsertEntries={upsertEntries}
+                      insertChains={insertChains}
+                    />
+                  }
+                </TabPanel>
               </TabPanels>
             </Tabs>
           </>
         )}
       </Flex>
     </Layout>
-  );
-};
-
-export const Jsoncode = ({ code }: { code: unknown }): JSX.Element => {
-  return (
-    <Box bg="orange.50" border="1px" borderColor="orange.100" color="gray.700" fontSize="sm" p="5">
-      <pre style={{}}>{JSON.stringify(code, undefined, 2)}</pre>
-    </Box>
   );
 };
 
