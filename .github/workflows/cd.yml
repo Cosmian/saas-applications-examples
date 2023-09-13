@@ -38,10 +38,10 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Build prod frontend docker
-        if: startsWith(github.ref, 'refs/tags')
         uses: docker/build-push-action@v3
         with:
-          context: "{{defaultContext}}:frontend"
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ env.REGISTRY_FRONTEND_IMAGE }}:prod
@@ -58,7 +58,6 @@ jobs:
     needs: build
     steps:
       - name: On prod env
-        if: startsWith(github.ref, 'refs/tags')
         env:
           REMOTE_URL: developer-example.cosmian.com
           DOCKER_COMPOSE_FILE: saas_applications_examples/prod/docker-compose.yml
