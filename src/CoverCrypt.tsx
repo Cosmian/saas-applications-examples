@@ -27,12 +27,14 @@ import { decryptDataInKms } from "./actions/decryptDataInKms";
 import { decryptDataLocally } from "./actions/decryptDataLocally";
 import { encryptDataInKms } from "./actions/encryptDataInKms";
 import { encryptDataLocally } from "./actions/encryptDataLocally";
-import { locateKeysByTags } from "./actions/locateKeysByTag";
+import { locateKeysByTags } from "./actions/locateKeysByTags";
 import { retrieveDecryptionKey } from "./actions/retrieveDecryptionKey";
 import { retrieveKeyPair } from "./actions/retrieveKeyPair";
 import { getKmsVersion } from "./actions/testKmsVersion";
 import { EncryptedResult, KeysId, PolicyAxisItem } from "./actions/types";
 import DatabaseSchema from "./assets/db-schema.png";
+import DecryptionInKMS from "./assets/decryption_in_KMS.drawio.svg";
+import DecryptionInBrowser from "./assets/decryption_in_presentation_layer.drawio.svg";
 import EmployeesDatabaseImage from "./assets/employees-database.png";
 import { EmployeeTable, EncryptedTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
@@ -107,7 +109,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       "decryptDataLocally",
       "encryptDataInKms",
       "encryptDataLocally",
-      "locateKeysByTag",
+      "locateKeysByTags",
       "retrieveDecryptionKey",
       "retrieveKeyPair",
       "testKmsVersion",
@@ -499,8 +501,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* LOCATE KEYS */}
-              <HeadingWithCode heading="Locate Keys by tag" code="/src/actions/locatedKeys.ts" />
-              <CodeHighlighter codeInput={code?.locatedKeys} />
+              <HeadingWithCode heading="Locate Keys by tag" code="/src/actions/locateKeysByTags.ts" />
+              <CodeHighlighter codeInput={code?.locateKeysByTags} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Tags separate with commas" onChange={(e) => setLocateKeyInput(e.target.value)} />
                 <Button onClick={locateKeys} width="50%">
@@ -521,6 +523,18 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* ENCRYPT/DECRYPT IN BROWSER */}
               <HeadingWithCode heading="Encrypt & Decrypt data in browser" />
+              <Text>
+                the SaaS provider can implement the encryption and decryption algorithms in the presentation layer, using the Cosmian
+                libraries.
+              </Text>
+              <Image
+                boxSize="100%"
+                maxWidth={600}
+                alignSelf={"center"}
+                objectFit="cover"
+                src={DecryptionInBrowser}
+                alt="Decryption in browser"
+              />
               <Code>/src/actions/encryptDataLocally.ts</Code>
               <CodeHighlighter codeInput={code?.encryptDataLocally} />
               <Code>/src/actions/decryptDataLocally.ts</Code>
@@ -540,6 +554,10 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* ENCRYPT/DECRYPT IN KMS */}
               <HeadingWithCode heading="Encrypt & Decrypt data in KMS" />
+              <Text>
+                The safest implementation is to issue calls to the KMS, whether on-prem or SaaS, to decrypt (or encrypt) the data.
+              </Text>
+              <Image boxSize="100%" maxWidth={600} alignSelf={"center"} objectFit="cover" src={DecryptionInKMS} alt="Decryption in KMS" />
               <Code>/src/actions/encryptDataInKms.ts</Code>
               <CodeHighlighter codeInput={code?.encryptDataInKms} />
               <Code>/src/actions/decryptDataInKms.ts</Code>

@@ -169,7 +169,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <Text>
             <Text as="b">Client 2</Text> wraps its public key <Code>pk_2</Code> in a certificate.
           </Text>
-          <Button onClick={handleWrapPkInCertificate} width="100%">
+          <Button onClick={handleWrapPkInCertificate} width="100%" disabled>
             Wrapped pk_2 in a certificate
           </Button>
 
@@ -178,7 +178,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <Text>
             <Text as="b">Client 2</Text> publishes its wrapped public key <Code>pk_2</Code> in the <Text as="b">SaaS PKI</Text>
           </Text>
-          <Button onClick={handlePublishKey} width="100%">
+          <Button onClick={handlePublishKey} width="100%" disabled>
             Publish wrapped pk_2
           </Button>
         </>
