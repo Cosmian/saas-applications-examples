@@ -76,6 +76,7 @@ jobs:
     needs: build
     steps:
       - name: On staging env
+        if: github.ref_name == 'main'
         env:
           REMOTE_URL: developer-example.cosmian.com
           DOCKER_COMPOSE_FILE: saas_applications_examples/staging/docker-compose.yml
@@ -88,6 +89,7 @@ jobs:
           ssh cosmian@${REMOTE_URL} docker system prune -f
 
       - name: On prod env
+        if: startsWith(github.ref, 'refs/tags')
         env:
           REMOTE_URL: developer-example.cosmian.com
           DOCKER_COMPOSE_FILE: saas_applications_examples/prod/docker-compose.yml
