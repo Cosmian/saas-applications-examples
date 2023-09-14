@@ -1,0 +1,13 @@
+version: "3"
+services:
+  backend:
+    container_name: kms_4.5.0
+    image: ghcr.io/cosmian/kms:4.5.0
+    ports:
+      - 9998:9998
+  frontend:
+    image: ghcr.io/cosmian/saas_applications_examples:prod
+    container_name: saas_applications_examples_frontend_prod
+    ports:
+      - 3000:3000
+    restart: always

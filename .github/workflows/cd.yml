@@ -46,12 +46,11 @@ jobs:
           tags: |
             ${{ env.REGISTRY_FRONTEND_IMAGE }}:prod
           labels: ${{ steps.meta-front.outputs.labels }}
-          # Hide args
           build-args: |
-            VITE_BACKEND_URL=$VITE_BACKEND_URL 
-            VITE_AUTH0_DOMAIN=$VITE_AUTH0_DOMAIN
-            VITE_AUTH0_CUSTOM_DOMAIN=$VITE_AUTH0_CUSTOM_DOMAIN
-            VITE_AUTH0_CLIENT_ID=$VITE_AUTH0_CLIENT_ID
+            VITE_BACKEND_URL=${{ vars.VITE_BACKEND_URL }}
+            VITE_AUTH0_DOMAIN=${{ vars.VITE_AUTH0_DOMAIN }}
+            VITE_AUTH0_CUSTOM_DOMAIN=${{ vars.VITE_AUTH0_CUSTOM_DOMAIN }}
+            VITE_AUTH0_CLIENT_ID=${{ vars.VITE_AUTH0_CLIENT_ID }}
 
   deploy:
     runs-on: self-hosted
@@ -60,7 +59,7 @@ jobs:
       - name: On prod env
         env:
           REMOTE_URL: developer-example.cosmian.com
-          DOCKER_COMPOSE_FILE: saas_applications_examples/prod/docker-compose.yml
+          DOCKER_COMPOSE_FILE: saas_applications_examples/docker-compose.yml
         run: |
           ssh cosmian@${REMOTE_URL} docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p "${{ secrets.GITHUB_TOKEN }}"
           ssh cosmian@${REMOTE_URL} docker-compose -f ${DOCKER_COMPOSE_FILE} pull
