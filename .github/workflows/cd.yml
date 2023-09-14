@@ -77,7 +77,7 @@ jobs:
     steps:
       - name: On staging env
         env:
-          REMOTE_URL: developer-example.staging.cosmian.com
+          REMOTE_URL: developer-example.cosmian.com
           DOCKER_COMPOSE_FILE: saas_applications_examples/staging/docker-compose.yml
         run: |
           ssh cosmian@${REMOTE_URL} docker login ${{ env.REGISTRY }} -u ${{ github.actor }} -p "${{ secrets.GITHUB_TOKEN }}"
