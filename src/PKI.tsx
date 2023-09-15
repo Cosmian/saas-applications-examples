@@ -136,7 +136,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           </ListItem>
         </OrderedList>
         <Text>The flow is independent of Client 1 and Client 2 using their own KMS or the SaaS provider’s enclaved KMS. </Text>
-        <Image boxSize="100%" maxWidth={600} alignSelf={"center"} objectFit="cover" src={PkiDrawIo} alt="Employees database schema" />
+        <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={PkiDrawIo} alt="Employees database schema" />
       </Stack>
 
       {health && kmsEncryptedData && kmsEncryptedData.length > 0 && clientTwoKeyPair && (

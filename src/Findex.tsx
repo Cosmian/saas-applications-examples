@@ -25,7 +25,7 @@ import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
 import FindexSchema from "./assets/Findex.png";
-import EmployeesDatabaseImage from "./assets/employees-database-basic.png";
+import { EmployeeTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
 type CodeContent = {
@@ -213,14 +213,8 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         <Text>Its definition is:</Text>
         <CodeHighlighter codeInput={code?.upsertData} />
         <Text>In this example we will index employees database:</Text>
-        <Image
-          boxSize="100%"
-          maxWidth={900}
-          alignSelf={"center"}
-          objectFit="cover"
-          src={EmployeesDatabaseImage}
-          alt="Employees database schema"
-        />
+        <EmployeeTable data={employees} />
+
         <Button onClick={handleUpsertData} width="100%" isDisabled={!findexKey || !label}>
           Index database
         </Button>

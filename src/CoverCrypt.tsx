@@ -529,7 +529,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               </Text>
               <Image
                 boxSize="100%"
-                maxWidth={600}
+                maxWidth={800}
                 alignSelf={"center"}
                 objectFit="cover"
                 src={DecryptionInBrowser}
@@ -543,7 +543,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                 <Button onClick={() => handleEncrypt({ browser: true })} width="50%">
                   Encrypt data in browser
                 </Button>
-                <Button onClick={() => handleDecryptLocally()} width="50%" isDisabled={localEncryptedData == null}>
+                <Button
+                  onClick={() => handleDecryptLocally()}
+                  width="50%"
+                  isDisabled={localEncryptedData == null || decryptionKeyId == null}
+                >
                   Decrypt in browser
                 </Button>
               </ButtonGroup>
@@ -557,7 +561,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               <Text>
                 The safest implementation is to issue calls to the KMS, whether on-prem or SaaS, to decrypt (or encrypt) the data.
               </Text>
-              <Image boxSize="100%" maxWidth={600} alignSelf={"center"} objectFit="cover" src={DecryptionInKMS} alt="Decryption in KMS" />
+              <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={DecryptionInKMS} alt="Decryption in KMS" />
               <Code>/src/actions/encryptDataInKms.ts</Code>
               <CodeHighlighter codeInput={code?.encryptDataInKms} />
               <Code>/src/actions/decryptDataInKms.ts</Code>
@@ -566,7 +570,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                 <Button onClick={() => handleEncrypt({ browser: false })} width="50%">
                   Encrypt data in KMS
                 </Button>
-                <Button onClick={() => handleDecryptInKms()} width="50%" isDisabled={kmsEncryptedData == null}>
+                <Button onClick={() => handleDecryptInKms()} width="50%" isDisabled={kmsEncryptedData == null || decryptionKeyId == null}>
                   Decrypt data in KMS
                 </Button>
               </ButtonGroup>
