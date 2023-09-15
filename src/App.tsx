@@ -1,5 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button, Center, Flex, Heading, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { Button, Center, Flex, Heading, Link, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import { callbacksExamplesInMemory } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import CoverCrypt from "./CoverCrypt";
@@ -65,6 +66,18 @@ const App = (): JSX.Element => {
           Cosmian for Saas Applications
         </Heading>
         <Text fontSize="xl">Code samples for developers.</Text>
+        <Text>
+          Check out the project github repository{" "}
+          <Link
+            fontSize="md"
+            color="orange.500"
+            textDecoration="underline"
+            href="https://github.com/Cosmian/saas-applications-examples"
+            isExternal
+          >
+            https://github.com/Cosmian/saas-applications-examples <ExternalLinkIcon mx="2px" />
+          </Link>
+        </Text>
 
         {!isAuthenticated && <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>}
         {isAuthenticated && (
