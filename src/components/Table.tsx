@@ -31,11 +31,15 @@ export const EmployeeTable: React.FC<{ data: Employee[]; caption?: string }> = (
   );
 };
 
-export const EncryptedTable: React.FC<{ data: EncryptedResult[]; caption?: string }> = ({ data, caption }) => {
+export const EncryptedTable: React.FC<{ data: EncryptedResult[]; caption?: string; colorScheme?: string }> = ({
+  data,
+  caption,
+  colorScheme,
+}) => {
   const header = Object.keys(data[0]);
   return (
     <TableContainer>
-      <Table variant="simple" width={"100%"}>
+      <Table variant="simple" width={"100%"} colorScheme={colorScheme ? colorScheme : "orange"}>
         <Thead>
           <Tr>
             {header.map((key, index) => (
