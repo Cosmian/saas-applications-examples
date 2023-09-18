@@ -12,6 +12,8 @@ import PkiDrawIo from "./assets/pki.drawio.svg";
 import { EncryptedTable } from "./components/Table";
 import { employees } from "./utils/employees";
 
+export const CLIENT_2_TOKEN = import.meta.env.VITE_CLIENT_2_TOKEN as string;
+
 const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const toast = useToast();
 
@@ -25,7 +27,6 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
   // data
   const [kmsEncryptedData, setKmsEncryptedData] = useState<undefined | EncryptedResult[]>();
-  // const [kmsClearData, setKmsClearData] = useState<undefined | Employee[]>();
 
   useEffect(() => {
     const getHealth = async (): Promise<void> => {
@@ -89,7 +90,8 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const clientTwoActions = async (): Promise<void> => {
     // create policy + key pair
     const policy = await createPolicy(POLICY_AXIS);
-    const keyPair = await createCovercryptKeyPair(kmsToken, policy);
+    const keyPair = await createCovercryptKeyPair(CLIENT_2_TOKEN, policy);
+    console.log("keyPair", keyPair);
     setClientTwoKeyPair(keyPair);
   };
 
