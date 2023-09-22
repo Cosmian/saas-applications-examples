@@ -6,8 +6,6 @@ import { auth0_config } from "./utils/config.ts";
 
 import { ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 
-console.log(auth0_config);
-
 const providerConfig: Auth0ProviderOptions = {
   domain: auth0_config.domain,
   clientId: auth0_config.client,

@@ -1,7 +1,7 @@
 import { KmsClient, KmsObject } from "cloudproof_js";
 import { BACKEND_URL } from "./backendConfig";
 
-export const saveObjectInPKI = async (
+export const uploadKeyInPKI = async (
   kmsToken: string,
   uniqueIdentifier: string,
   kmsObject: KmsObject,
