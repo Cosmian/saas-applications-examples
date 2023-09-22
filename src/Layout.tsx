@@ -1,5 +1,5 @@
 import { CheckIcon } from "@chakra-ui/icons";
-import { Box, Button, Code, Container, Divider, Heading, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, Code, Container, Divider, Heading, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atelierSulphurpoolDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
@@ -61,5 +61,23 @@ export const HeadingWithCode: React.FC<{ heading: string; code?: string | string
       {code && typeof code === "object" && code.map((item, i) => <Code key={i}>{item}</Code>)}
       {code && typeof code === "string" && <Code>{code}</Code>}
     </>
+  );
+};
+
+export const ClientBadge: React.FC<{ client: 1 | 2 | undefined; children: JSX.Element | string }> = ({ client, children }) => {
+  const getColor = (): "blue" | "red" | undefined => {
+    switch (client) {
+      case 1:
+        return "blue";
+      case 2:
+        return "red";
+      default:
+        return undefined;
+    }
+  };
+  return (
+    <Badge variant="outline" colorScheme={getColor()} style={{ translate: "0 -1px" }}>
+      {children}
+    </Badge>
   );
 };
