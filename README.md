@@ -30,7 +30,7 @@ After the process is complete, open your browser and navigate to [http://localho
 Start a Cosmian KMS server on http://localhost:9998:
 
 ```
-docker run -p 9998:9998 --name kms ghcr.io/cosmian/kms:4.5.0
+docker run -p 9998:9998 --name kms ghcr.io/cosmian/kms:4.6.0
 ```
 
 Then start the UI with:
