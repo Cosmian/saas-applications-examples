@@ -2,8 +2,8 @@
 // Types
 //
 export type KeysId = {
-  masterPublicKeyUID: string;
-  masterSecretKeyUID: string;
+  masterPublicKeyUId: string;
+  masterSecretKeyUId: string;
 };
 
 export type KeysBytes = {
