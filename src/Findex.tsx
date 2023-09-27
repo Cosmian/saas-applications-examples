@@ -24,7 +24,7 @@ import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
-import FindexSchema from "./assets/Findex.png";
+import FindexSchema from "./assets/findex.svg";
 import { EmployeeTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
@@ -144,7 +144,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           content of the index, the queries, or the responses, one can use Zero-Trust environments, such as the public cloud, to store the
           indexes.
         </Text>
-        <Image boxSize="100%" maxWidth={900} alignSelf={"center"} objectFit="cover" src={FindexSchema} alt="Findex schema" />
+        <Image boxSize="100%" maxWidth={1200} alignSelf={"center"} objectFit="cover" src={FindexSchema} alt="Findex schema" />
       </Stack>
       <Stack spacing={3}>
         {/* CREATE FINDEX KEY */}
