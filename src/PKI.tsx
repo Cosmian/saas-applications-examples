@@ -12,6 +12,7 @@ import { decryptDataInKms } from "./actions/decryptDataInKms";
 import { encryptDataInKms } from "./actions/encryptDataInKms";
 import { fetchPKI } from "./actions/fetchPKI";
 import { fetchWrappedKey } from "./actions/fetchWrappedKey";
+import { grantGetKeyAccess } from "./actions/grantGetKeyAccess";
 import { getKmsVersion } from "./actions/testKmsVersion";
 import { EncryptedResult } from "./actions/types";
 import { uploadKeyInPKI } from "./actions/uploadKeyInPKI";
@@ -53,6 +54,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const [wrappedUdk2, setWrappedUdk2] = useState<undefined | KmsObject>();
   const [unwrappedUdkUid, setUnwrappedUdkUid] = useState<undefined | string>();
   const [code, setCode] = useState<CodeContent>();
+  const [accessGranted, setAccessGranted] = useState<undefined | boolean>();
 
   useEffect(() => {
     getHealth();
@@ -75,7 +77,15 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
   const getTextFromFile = async (): Promise<void> => {
     const tempCode: CodeContent = {};
-    const files = ["fetchPKI", "fetchWrappedKey", "uploadPemInPKI", "uploadKeyInPKI", "wrapKeyInCertificate", "decryptDataInKms"];
+    const files = [
+      "fetchPKI",
+      "fetchWrappedKey",
+      "uploadPemInPKI",
+      "uploadKeyInPKI",
+      "wrapKeyInCertificate",
+      "decryptDataInKms",
+      "grantGetKeyAccess",
+    ];
     for (const file of files) {
       const response = await fetch(`./actions/${file}.ts`);
       const text = await response.text();
@@ -142,6 +152,14 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     }
   };
 
+  // Client 2
+  const grantAccessGetPk = async (): Promise<void> => {
+    if (publishedWrappedPkUid) {
+      grantGetKeyAccess(CLIENT_2_TOKEN, publishedWrappedPkUid);
+      setAccessGranted(true);
+    }
+  };
+
   // Client 1
   const getCertificateFromPki = async (): Promise<void> => {
     if (publishedWrappedPkUid) {
@@ -168,6 +186,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     if (wrappedUdk && wrappedUdk.type === "PrivateKey") {
       const uid = await uploadKeyInPKI(kmsToken, uuidv4(), wrappedUdk, false);
       setWrappedUdkUid(uid);
+      await grantGetKeyAccess(kmsToken, uid);
     }
   };
 
@@ -181,8 +200,8 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
   // Client 2
   const unwrapUdk = async (): Promise<void> => {
-    if (wrappedUdk2) {
-      const uid = await uploadKeyInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedUdk2, true);
+    if (wrappedUdk2 && publishedWrappedPkUid) {
+      const uid = await uploadKeyInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedUdk2, true, publishedWrappedPkUid);
       setUnwrappedUdkUid(uid);
     }
   };
@@ -193,7 +212,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       const clearMarketing: Employee[] = await Promise.all(
         kmsEncryptedData.map(async (row) => {
           try {
-            const marketing = await decryptDataInKms(row.marketing, kmsToken, unwrappedUdkUid);
+            const marketing = await decryptDataInKms(row.marketing, CLIENT_2_TOKEN, unwrappedUdkUid);
             const decryptedMarketing = JSON.parse(marketing);
             return decryptedMarketing;
           } catch {
@@ -204,7 +223,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       const clearHR: Employee[] = await Promise.all(
         kmsEncryptedData.map(async (row) => {
           try {
-            const hr = await decryptDataInKms(row.hr, kmsToken, unwrappedUdkUid);
+            const hr = await decryptDataInKms(row.hr, CLIENT_2_TOKEN, unwrappedUdkUid);
             const decryptedHr = JSON.parse(hr);
             return decryptedHr;
           } catch {
@@ -334,13 +353,31 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             </>
           )}
 
+          {/* 3-bis - CLIENT 2: GRANT GET ACCESS oon Public KEY in KMS */}
+          <HeadingWithCode heading="Grant access" code="/src/actions/grantGetKeyAccess.ts" />
+          <CodeHighlighter codeInput={code?.grantGetKeyAccess} />
+          <Text>
+            <ClientTwo /> grants wildcard access for GET operation to his imported wrapped public key in <Text as="b">SaaS KMS</Text>
+          </Text>
+          <Button onClick={grantAccessGetPk} width="100%" isDisabled={!publishedWrappedPkUid} colorScheme="red" variant="outline">
+            Grant access
+          </Button>
+          {accessGranted && (
+            <>
+              <Center gap="2">
+                <CheckCircleIcon color="green.500" />
+                OK. Access has been granted on <Code>pk_2</Code> in SaaS KMS for GET operation
+              </Center>
+            </>
+          )}
+
           {/* 4 - CLIENT 1: GET CERTIFICATE */}
           <HeadingWithCode heading="Get certificate" code="/src/actions/fetchPKI.ts" />
           <CodeHighlighter codeInput={code?.fetchPKI} />
           <Text>
             <ClientOne /> gets the certificate from the <Text as="b">SaaS KMS</Text>
           </Text>
-          <Button onClick={getCertificateFromPki} width="100%" isDisabled={!publishedWrappedPkUid} colorScheme="blue" variant="outline">
+          <Button onClick={getCertificateFromPki} width="100%" isDisabled={!accessGranted} colorScheme="blue" variant="outline">
             Get certificate
           </Button>
           {certificate && certificateUid && (
@@ -390,6 +427,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                 <CheckCircleIcon color="green.500" />
                 OK. Wrapped Decryption key <Code>Enc(sk_a)</Code> has been saved in SaaS KMS under uid: <Code>{wrappedUdkUid}</Code>.
               </Center>
+              <Center>Access has also been granted for GET operation for this key.</Center>
             </>
           )}
 
