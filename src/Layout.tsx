@@ -33,8 +33,8 @@ export const CodeHighlighter: React.FC<{ codeInput: string | undefined; language
         size="xs"
         colorScheme="whiteAlpha"
         position="relative"
-        top="30px"
-        right="5px"
+        top="40px"
+        right="15px"
         onClick={handleCopy}
       >
         {copied ? "Copied" : "Copy"}
@@ -42,8 +42,9 @@ export const CodeHighlighter: React.FC<{ codeInput: string | undefined; language
       <SyntaxHighlighter
         language={language ? language : "typescript"}
         style={atelierSulphurpoolDark}
-        showLineNumbers
-        customStyle={{ textAlign: "left" }}
+        customStyle={{ textAlign: "left", padding: 20 }}
+        wrapLongLines={true}
+        showLineNumbers={false} // disable line numbers to wrap long lines
       >
         {codeInput}
       </SyntaxHighlighter>

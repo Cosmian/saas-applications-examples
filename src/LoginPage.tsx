@@ -23,13 +23,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ loginWithRedirect }) => {
             bgGradient="linear(to-r, #FF8C4A, #FE0534)"
             bgClip="text"
             fontSize="5xl"
-            fontFamily={"Montserrat"}
+            fontFamily={"Montserrat, Helvetica, Arial, sans-serif"}
             fontWeight={"bold"}
             lineHeight="1em"
           >
             Cosmian for SaaS Applications
           </Text>
-          <Text fontSize="3xl" color="white" fontFamily={"Montserrat"} fontWeight="semibold">
+          <Text fontSize="3xl" color="white" fontFamily={"Montserrat, Helvetica, Arial, sans-serif"} fontWeight="semibold">
             Architecture diagrams and developer code examples
           </Text>
           <Button onClick={loginWithRedirect}>Create an account or login with Auth0</Button>
