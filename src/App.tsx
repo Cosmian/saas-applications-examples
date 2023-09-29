@@ -7,10 +7,12 @@ import CoverCrypt from "./CoverCrypt";
 import Findex from "./Findex";
 import Layout from "./Layout";
 import LoginPage from "./LoginPage";
+import Overview from "./Overview";
 import PKI from "./PKI";
 
 const App = (): JSX.Element => {
   const [kmsToken, setKmsToken] = useState<undefined | string>();
+  const [tabIndex, setTabIndex] = useState(0);
 
   const { isLoading, error, user, loginWithRedirect, getIdTokenClaims, logout, isAuthenticated } = useAuth0();
   const { fetchEntries, fetchChains, upsertEntries, insertChains } = callbacksExamplesInMemory();
@@ -24,6 +26,11 @@ const App = (): JSX.Element => {
       getToken();
     }
   }, [user]);
+
+  const onTabChange = (tabIndex: number): void => {
+    window.scrollTo(0, 0);
+    setTabIndex(tabIndex);
+  };
 
   //
   // Auth0 actions
@@ -88,14 +95,18 @@ const App = (): JSX.Element => {
           <Button onClick={handleLogout} style={{ position: "absolute", top: 20, right: 20 }}>
             Log out
           </Button>
-          <Tabs isLazy>
+          <Tabs isLazy onChange={(index) => setTabIndex(index)} index={tabIndex}>
             <TabList>
-              <Tab>Covercrypt & KMS actions</Tab>
-              <Tab>PKI actions</Tab>
-              <Tab>Findex</Tab>
+              <Tab>Overview</Tab>
+              <Tab>Attribute-based encryption</Tab>
+              <Tab>Key distribution</Tab>
+              <Tab>Search on encrypted data</Tab>
             </TabList>
 
             <TabPanels marginBottom={12}>
+              <TabPanel>
+                <Overview onTabChange={onTabChange} />
+              </TabPanel>
               <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
               <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
               <TabPanel>

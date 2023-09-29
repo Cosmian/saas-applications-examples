@@ -348,7 +348,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       {/* INTRO */}
 
       <Heading as="h2" size="lg">
-        Test KMS actions combined with our attribute-based encryption scheme: Covercrypt.
+        Attribute-based encryption with <em>Covercrypt</em>
       </Heading>
       <Heading as="h3" size="md">
         Example of use: employees database

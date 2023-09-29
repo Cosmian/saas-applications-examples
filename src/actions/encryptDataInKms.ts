@@ -15,3 +15,15 @@ export const encryptDataInKms = async (
   const encryptedData = await client.coverCryptEncrypt(masterPublicKeyUid, accessPolicy, data);
   return encryptedData;
 };
+
+export const bulkEncryptInKms = async (
+  clearData: string[],
+  kmsToken: string,
+  accessPolicy: string,
+  mpkID: string
+): Promise<Uint8Array[]> => {
+  const client = new KmsClient(BACKEND_URL, kmsToken);
+  const data = clearData.map((clear) => new TextEncoder().encode(clear));
+  const response = await client.coverCryptBulkEncrypt(mpkID, accessPolicy, data);
+  return response;
+};

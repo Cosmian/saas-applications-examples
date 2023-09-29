@@ -135,7 +135,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
     <Flex flexDirection={"column"} gap="8">
       {/* INTRO */}
       <Heading as="h2" size="lg">
-        Search on encrypted data
+        Search on encrypted data with <em>Findex</em>
       </Heading>
       <Stack spacing={3}>
         <Text>
