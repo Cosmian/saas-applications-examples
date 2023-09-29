@@ -81,3 +81,10 @@ export const ClientBadge: React.FC<{ client: 1 | 2 | undefined; children: JSX.El
     </Badge>
   );
 };
+
+export const ClientOne = () => {
+  return <ClientBadge client={1}>Client 1</ClientBadge>;
+};
+export const ClientTwo = () => {
+  return <ClientBadge client={2}>Client 2</ClientBadge>;
+};

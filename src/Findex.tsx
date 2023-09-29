@@ -24,7 +24,7 @@ import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
-import FindexSchema from "./assets/Findex.png";
+import FindexSchema from "./assets/findex.svg";
 import { EmployeeTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
@@ -144,12 +144,13 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           content of the index, the queries, or the responses, one can use Zero-Trust environments, such as the public cloud, to store the
           indexes.
         </Text>
-        <Image boxSize="100%" maxWidth={900} alignSelf={"center"} objectFit="cover" src={FindexSchema} alt="Findex schema" />
+        <Image boxSize="100%" maxWidth={1200} alignSelf={"center"} objectFit="cover" src={FindexSchema} alt="Findex schema" />
       </Stack>
+
       <Stack spacing={3}>
         {/* CREATE FINDEX KEY */}
         <HeadingWithCode heading="Generate Findex key" code="/src/actions/createFindexKey.ts" />
-        <Text>Findex uses a single symmetric 128 bit key to upsert and search. Encryption is performed using AES 128 GCM.</Text>
+        <Text>Findex uses a single symmetric 128 bit key to upsert and search.</Text>
         <CodeHighlighter codeInput={code?.createFindexKey} />
         <Button onClick={handleCreateFindexKey} width="100%">
           Create Findex key
@@ -161,13 +162,13 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           </Center>
         )}
       </Stack>
+
       <Stack spacing={3}>
         {/* CREATE FINDEX LABEL */}
         <HeadingWithCode heading="Labeling: salting the encryption" code="/src/actions/defineLabel.ts" />
         <Text>
-          When indexing, the encryption uses an arbitrarily chosen public label; this label may represent anything, such as a period, e.g.,
-          “Q1 2022”. It should be changed when the index is compacted or recreated. Changing it regularly significantly increases the
-          difficulty of performing statistical attacks.
+          When indexing, Findex uses an arbitrarily chosen public label; this label may represent anything, such as a period, e.g., “Q1
+          2022”. Changing it regularly significantly increases the difficulty of performing statistical attacks.
         </Text>
         <CodeHighlighter codeInput={code?.defineLabel} />
         <Stack spacing={5} direction="row">
@@ -189,6 +190,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           </Center>
         )}
       </Stack>
+
       <Stack spacing={3}>
         {/* DEFINE CALLBACKS*/}
         <HeadingWithCode heading="Define callbacks" code="/src/actions/defineCallbacks.ts" />
@@ -198,13 +200,13 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           tables: the Entry table and the Chain table. Both have two columns: uid and value.
         </Text>
         <Text>
-          To keep it simple here, we can use default callbacks available in <b>cloudproof_js</b> to fetch and upstert elements in both
-          tables - in memory.
+          To keep it simple here, we can use in-memory tables for which default callbacks are available in <b>cloudproof_js</b>.
         </Text>
         <CodeHighlighter codeInput={code?.defineCallbacks} />
       </Stack>
+
       <Stack spacing={3}>
-        {/* UPSERT DATA */}
+        {/* INDEX DATABASE */}
         <HeadingWithCode heading="Index database" code="/src/actions/upsertData.ts" />
         <Text>
           To perform insertions or updates (a.k.a upserts), supply an array of IndexedEntry. This structure maps an IndexedValue to a list
@@ -212,15 +214,16 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         </Text>
         <Text>Its definition is:</Text>
         <CodeHighlighter codeInput={code?.upsertData} />
-        <Text>In this example we will index employees database:</Text>
+        <Text>In this example we will index employees’ database:</Text>
         <EmployeeTable data={employees} />
 
         <Button onClick={handleUpsertData} width="100%" isDisabled={!findexKey || !label}>
           Index database
         </Button>
       </Stack>
+
       <Stack spacing={3}>
-        {/* SEARCH DATA */}
+        {/* SEARCH WORDS */}
         <HeadingWithCode heading="Search words" code="/src/actions/searchWords.ts" />
         <Text>Querying the index is performed using the search function.</Text>
         <CodeHighlighter codeInput={code?.searchWords} />

@@ -6,12 +6,12 @@ import { BACKEND_URL } from "./backendConfig";
 //
 export const createDecryptionKey = async (
   kmsToken: string,
-  masterSecretKeyUID: string,
+  masterSecretKeyUId: string,
   decryptionAccessPolicy: string,
   tags: string[] | undefined = undefined
 ): Promise<string> => {
   const client = new KmsClient(BACKEND_URL, kmsToken);
 
-  const decryptionKeyUID = await client.createCoverCryptUserDecryptionKey(decryptionAccessPolicy, masterSecretKeyUID, tags);
-  return decryptionKeyUID;
+  const decryptionKeyUId = await client.createCoverCryptUserDecryptionKey(decryptionAccessPolicy, masterSecretKeyUId, tags);
+  return decryptionKeyUId;
 };

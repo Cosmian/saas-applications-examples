@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import CoverCrypt from "./CoverCrypt";
 import Findex from "./Findex";
 import Layout from "./Layout";
+import LoginPage from "./LoginPage";
 import PKI from "./PKI";
 
 const App = (): JSX.Element => {
@@ -58,6 +59,10 @@ const App = (): JSX.Element => {
     );
   }
 
+  if (!isAuthenticated) {
+    return <LoginPage loginWithRedirect={loginWithRedirect} />;
+  }
+
   return (
     <Layout>
       <Flex flexDirection={"column"} gap="8">
@@ -67,7 +72,7 @@ const App = (): JSX.Element => {
         </Heading>
         <Text fontSize="xl">Code samples for developers.</Text>
         <Text>
-          Check out the project github repository{" "}
+          Check out the GitHub project repository{" "}
           <Link
             fontSize="md"
             color="orange.500"
@@ -79,36 +84,26 @@ const App = (): JSX.Element => {
           </Link>
         </Text>
 
-        {!isAuthenticated && <Button onClick={() => loginWithRedirect()}>Login with Auth0</Button>}
-        {isAuthenticated && (
-          <>
-            <Button onClick={handleLogout} style={{ position: "absolute", top: 20, right: 20 }}>
-              Log out
-            </Button>
-            <Tabs isLazy>
-              <TabList>
-                <Tab>Covercrypt & KMS actions</Tab>
-                <Tab>PKI actions</Tab>
-                <Tab>Findex</Tab>
-              </TabList>
+        <>
+          <Button onClick={handleLogout} style={{ position: "absolute", top: 20, right: 20 }}>
+            Log out
+          </Button>
+          <Tabs isLazy>
+            <TabList>
+              <Tab>Covercrypt & KMS actions</Tab>
+              <Tab>PKI actions</Tab>
+              <Tab>Findex</Tab>
+            </TabList>
 
-              <TabPanels marginBottom={12}>
-                <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
-                <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
-                <TabPanel>
-                  {
-                    <Findex
-                      fetchEntries={fetchEntries}
-                      fetchChains={fetchChains}
-                      upsertEntries={upsertEntries}
-                      insertChains={insertChains}
-                    />
-                  }
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
-          </>
-        )}
+            <TabPanels marginBottom={12}>
+              <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
+              <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
+              <TabPanel>
+                {<Findex fetchEntries={fetchEntries} fetchChains={fetchChains} upsertEntries={upsertEntries} insertChains={insertChains} />}
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </>
       </Flex>
     </Layout>
   );

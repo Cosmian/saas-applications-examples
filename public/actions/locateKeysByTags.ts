@@ -6,6 +6,6 @@ import { BACKEND_URL } from "./backendConfig";
 ///
 export const locateKeysByTags = async (kmsToken: string, tags: string[]): Promise<string[]> => {
   const client = new KmsClient(BACKEND_URL, kmsToken);
-  const locatedKeysId = await client.getUniqueIdentifiersByTags(tags);
-  return locatedKeysId;
+  const locatedKeysUid = await client.getUniqueIdentifiersByTags(tags);
+  return locatedKeysUid;
 };
