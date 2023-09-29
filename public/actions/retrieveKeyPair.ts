@@ -5,7 +5,7 @@ import { BACKEND_URL } from "./backendConfig";
 // Retrieve Key Pair
 //
 
-type KeysId = {
+type KeysUid = {
   masterPublicKeyUId: string;
   masterSecretKeyUId: string;
 };
@@ -15,7 +15,7 @@ type KeysBytes = {
   masterSecretKeyBytes: Uint8Array;
 };
 
-export const retrieveKeyPair = async (kmsToken: string, keyPair: KeysId): Promise<KeysBytes> => {
+export const retrieveKeyPair = async (kmsToken: string, keyPair: KeysUid): Promise<KeysBytes> => {
   const client = new KmsClient(BACKEND_URL, kmsToken);
   const masterPublicKeyBytes = (await client.retrieveCoverCryptPublicMasterKey(keyPair.masterPublicKeyUId)).bytes();
   const masterSecretKeyBytes = (await client.retrieveCoverCryptSecretMasterKey(keyPair.masterSecretKeyUId)).bytes();

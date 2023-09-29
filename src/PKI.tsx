@@ -277,7 +277,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <HeadingWithCode heading="Data encrypted under Client 1’s key" />
           <Stack spacing={3}>
             <Text>
-              Say <ClientOne /> has already done theses actions:
+              Say <ClientOne /> has already done these actions:
             </Text>
             <UnorderedList>
               <ListItem>
@@ -320,7 +320,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <HeadingWithCode heading="Publish certificate" code="/src/actions/uploadPemInPKI.ts" />
           <CodeHighlighter codeInput={code?.uploadPemInPKI} />
           <Text>
-            <ClientTwo /> publishes its public key <Code>pk_2</Code> wrapped as a certificate in the <Text as="b">SaaS KMS</Text>
+            <ClientTwo /> publishes its public key <Code>pk_2</Code> wrapped in a certificate in the <Text as="b">SaaS KMS</Text>
           </Text>
           <Button onClick={publishWrappedPK} width="100%" isDisabled={!savedSk2} colorScheme="red" variant="outline">
             Publish certificate
@@ -360,7 +360,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <CodeHighlighter codeInput={code?.fetchWrappedKey} />
           <Text>
             After importing in his KMS <ClientTwo />
-            ’s certificate, <ClientOne /> retrieve the user decryption key from his KMS <Code>Enc(sk_a)</Code> wrapped with this
+            ’s certificate, <ClientOne /> retrieves the user decryption key from his KMS <Code>Enc(sk_a)</Code> wrapped with this
             certificate.
           </Text>
           <Button onClick={retrieveWrappedUdk} width="100%" isDisabled={!certificate} colorScheme="blue" variant="outline">
@@ -379,7 +379,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <HeadingWithCode heading="Send wrapped Decryption Key in Saas KMS" code="/src/actions/uploadKeyInPKI.ts" />
           <CodeHighlighter codeInput={code?.uploadKeyInPKI} />
           <Text>
-            <ClientOne /> send wrapped Decryption Key in <Text as="b">SaaS KMS</Text>.
+            <ClientOne /> sends wrapped Decryption Key in <Text as="b">SaaS KMS</Text>.
           </Text>
           <Button onClick={sendWrappedUdk} width="100%" isDisabled={!wrappedUdk} colorScheme="blue" variant="outline">
             Send wrapped Decryption Key

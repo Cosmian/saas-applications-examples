@@ -4,7 +4,7 @@ import { BACKEND_URL } from "./backendConfig";
 //
 // Create Covercrypt Key Pair
 //
-type KeysId = {
+export type KeysUid = {
   masterPublicKeyUId: string;
   masterSecretKeyUId: string;
 };
@@ -13,7 +13,7 @@ export const createCovercryptKeyPair = async (
   kmsToken: string,
   policy: Policy,
   tags: string[] | undefined = undefined
-): Promise<KeysId> => {
+): Promise<KeysUid> => {
   const client = new KmsClient(BACKEND_URL, kmsToken);
   const [masterSecretKeyUId, masterPublicKeyUId] = await client.createCoverCryptMasterKeyPair(policy, tags);
   return {

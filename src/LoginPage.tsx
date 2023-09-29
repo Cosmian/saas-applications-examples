@@ -13,7 +13,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ loginWithRedirect }) => {
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        // backgroundImage={CosmianEncryption}
         backgroundImage={{ base: "none", lg: CosmianEncryption }}
         backgroundRepeat="no-repeat"
         backgroundPosition="bottom -50% right -10%"

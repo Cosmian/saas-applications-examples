@@ -139,13 +139,14 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
       </Heading>
       <Stack spacing={3}>
         <Text>
-          Cosmian Findex is a Searchable Encryption scheme that allows building of encrypted indexes. One can efficiently search these
+          Cosmian Findex is a Searchable Encryption scheme that allows the building of encrypted indexes. One can efficiently search these
           encrypted indexes using encrypted queries and receive encrypted responses. Since the environment cannot learn anything about the
           content of the index, the queries, or the responses, one can use Zero-Trust environments, such as the public cloud, to store the
           indexes.
         </Text>
         <Image boxSize="100%" maxWidth={1200} alignSelf={"center"} objectFit="cover" src={FindexSchema} alt="Findex schema" />
       </Stack>
+
       <Stack spacing={3}>
         {/* CREATE FINDEX KEY */}
         <HeadingWithCode heading="Generate Findex key" code="/src/actions/createFindexKey.ts" />
@@ -161,6 +162,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           </Center>
         )}
       </Stack>
+
       <Stack spacing={3}>
         {/* CREATE FINDEX LABEL */}
         <HeadingWithCode heading="Labeling: salting the encryption" code="/src/actions/defineLabel.ts" />
@@ -188,6 +190,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           </Center>
         )}
       </Stack>
+
       <Stack spacing={3}>
         {/* DEFINE CALLBACKS*/}
         <HeadingWithCode heading="Define callbacks" code="/src/actions/defineCallbacks.ts" />
@@ -201,8 +204,9 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         </Text>
         <CodeHighlighter codeInput={code?.defineCallbacks} />
       </Stack>
+
       <Stack spacing={3}>
-        {/* UPSERT DATA */}
+        {/* INDEX DATABASE */}
         <HeadingWithCode heading="Index database" code="/src/actions/upsertData.ts" />
         <Text>
           To perform insertions or updates (a.k.a upserts), supply an array of IndexedEntry. This structure maps an IndexedValue to a list
@@ -210,15 +214,16 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         </Text>
         <Text>Its definition is:</Text>
         <CodeHighlighter codeInput={code?.upsertData} />
-        <Text>In this example we will index employees database:</Text>
+        <Text>In this example we will index employees’ database:</Text>
         <EmployeeTable data={employees} />
 
         <Button onClick={handleUpsertData} width="100%" isDisabled={!findexKey || !label}>
           Index database
         </Button>
       </Stack>
+
       <Stack spacing={3}>
-        {/* SEARCH DATA */}
+        {/* SEARCH WORDS */}
         <HeadingWithCode heading="Search words" code="/src/actions/searchWords.ts" />
         <Text>Querying the index is performed using the search function.</Text>
         <CodeHighlighter codeInput={code?.searchWords} />

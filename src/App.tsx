@@ -72,7 +72,7 @@ const App = (): JSX.Element => {
         </Heading>
         <Text fontSize="xl">Code samples for developers.</Text>
         <Text>
-          Check out the project github repository{" "}
+          Check out the GitHub project repository{" "}
           <Link
             fontSize="md"
             color="orange.500"
