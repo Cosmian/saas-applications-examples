@@ -99,8 +99,8 @@ const App = (): JSX.Element => {
             <TabList>
               <Tab>Overview</Tab>
               <Tab>Attribute-based encryption</Tab>
-              <Tab>PKI actions</Tab>
-              <Tab>Findex</Tab>
+              <Tab>Key distribution</Tab>
+              <Tab>Search on encrypted data</Tab>
             </TabList>
 
             <TabPanels marginBottom={12}>

@@ -233,7 +233,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     <Flex flexDirection={"column"} gap="8">
       {/* INTRO */}
       <Heading as="h2" size="lg">
-        Distributing keys between clients with Cosmian PKI
+        Distributing keys between clients with <em>Cosmian PKI</em>
       </Heading>
       <Stack spacing={3}>
         <Text>
