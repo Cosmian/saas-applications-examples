@@ -62,6 +62,15 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     clientOneActions();
   }, [kmsToken]);
 
+  const toastError = (error: unknown): void => {
+    toast({
+      title: typeof error === "string" ? error : (error as Error).message,
+      status: "error",
+      isClosable: true,
+    });
+    console.error(error);
+  };
+
   const getHealth = async (): Promise<void> => {
     try {
       setHealth(await getKmsVersion(kmsToken));
@@ -95,14 +104,14 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   };
 
   const clientOneActions = async (): Promise<void> => {
-    // generate policy + key pair
-    const policy = await createPolicy(POLICY_AXIS);
-    const keyPair = await createCovercryptKeyPair(kmsToken, policy);
-    // generate decryption key
-    const decryptionKey = await createDecryptionKey(kmsToken, keyPair.masterSecretKeyUId, ACCESS_POLICY);
-    setClientOneUdkUid(decryptionKey);
-    // encrypt table
     try {
+      // generate policy + key pair
+      const policy = await createPolicy(POLICY_AXIS);
+      const keyPair = await createCovercryptKeyPair(kmsToken, policy);
+      // generate decryption key
+      const decryptionKey = await createDecryptionKey(kmsToken, keyPair.masterSecretKeyUId, ACCESS_POLICY);
+      setClientOneUdkUid(decryptionKey);
+      // encrypt table
       const encryptedEmployees = await Promise.all(
         employees.map(async (employee) => {
           const encryptedMarketing = await encryptDataInKms(
@@ -132,43 +141,59 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       setKmsEncryptedData(encryptedEmployees);
       setWrappedPk2({ certBytes, privateKeyBytes });
     } catch (error) {
-      console.error(error);
+      toastError(error);
     }
   };
 
   // Client 2
   const saveSk2 = async (): Promise<void> => {
     if (wrappedPk2) {
-      const savedSk2Uid = await uploadPemInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.privateKeyBytes);
-      setSavedSk2(savedSk2Uid);
+      try {
+        const savedSk2Uid = await uploadPemInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.privateKeyBytes);
+        setSavedSk2(savedSk2Uid);
+      } catch (error) {
+        toastError(error);
+      }
     }
   };
 
   // Client 2
   const publishWrappedPK = async (): Promise<void> => {
     if (wrappedPk2) {
-      const wrappedPkCertUid = await uploadPemInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.certBytes);
-      setPublisheWrappedPkUid(wrappedPkCertUid);
+      try {
+        const wrappedPkCertUid = await uploadPemInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.certBytes);
+        setPublisheWrappedPkUid(wrappedPkCertUid);
+      } catch (error) {
+        toastError(error);
+      }
     }
   };
 
   // Client 2
   const grantAccessGetPk = async (): Promise<void> => {
     if (publishedWrappedPkUid) {
-      grantGetKeyAccess(CLIENT_2_TOKEN, publishedWrappedPkUid);
-      setAccessGranted(true);
+      try {
+        grantGetKeyAccess(CLIENT_2_TOKEN, publishedWrappedPkUid, "*");
+        setAccessGranted(true);
+      } catch (error) {
+        toastError(error);
+      }
     }
   };
 
   // Client 1
   const getCertificateFromPki = async (): Promise<void> => {
     if (publishedWrappedPkUid) {
-      const kmsObject = await fetchPKI(kmsToken, publishedWrappedPkUid);
-      setCertificate(kmsObject);
-      // Then save certificate in KMS
-      if (kmsObject.type === "Certificate") {
-        const uid = await uploadPemInPKI(kmsToken, uuidv4(), kmsObject.value.certificateValue);
-        setCertificateUid(uid);
+      try {
+        const kmsObject = await fetchPKI(kmsToken, publishedWrappedPkUid);
+        setCertificate(kmsObject);
+        // Then save certificate in KMS
+        if (kmsObject.type === "Certificate") {
+          const uid = await uploadPemInPKI(kmsToken, uuidv4(), kmsObject.value.certificateValue);
+          setCertificateUid(uid);
+        }
+      } catch (error) {
+        toastError(error);
       }
     }
   };
@@ -176,33 +201,49 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   // Client 1
   const retrieveWrappedUdk = async (): Promise<void> => {
     if (certificateUid && clientOneUdkUid) {
-      const wrappedKey = await fetchWrappedKey(kmsToken, clientOneUdkUid, certificateUid);
-      setWrappedUdk(wrappedKey);
+      try {
+        const wrappedKey = await fetchWrappedKey(kmsToken, clientOneUdkUid, certificateUid);
+        setWrappedUdk(wrappedKey);
+      } catch (error) {
+        toastError(error);
+      }
     }
   };
 
   // Client 1
   const sendWrappedUdk = async (): Promise<void> => {
     if (wrappedUdk && wrappedUdk.type === "PrivateKey") {
-      const uid = await uploadKeyInPKI(kmsToken, uuidv4(), wrappedUdk, false);
-      setWrappedUdkUid(uid);
-      await grantGetKeyAccess(kmsToken, uid);
+      try {
+        const uid = await uploadKeyInPKI(kmsToken, uuidv4(), wrappedUdk, false);
+        setWrappedUdkUid(uid);
+        await grantGetKeyAccess(kmsToken, uid, "*");
+      } catch (error) {
+        toastError(error);
+      }
     }
   };
 
   // Client 2
   const retrieveWrappedUdkFromKMS = async (): Promise<void> => {
     if (wrappedUdkUid) {
-      const obj = await fetchPKI(CLIENT_2_TOKEN, wrappedUdkUid);
-      setWrappedUdk2(obj);
+      try {
+        const obj = await fetchPKI(CLIENT_2_TOKEN, wrappedUdkUid);
+        setWrappedUdk2(obj);
+      } catch (error) {
+        toastError(error);
+      }
     }
   };
 
   // Client 2
   const unwrapUdk = async (): Promise<void> => {
     if (wrappedUdk2 && publishedWrappedPkUid) {
-      const uid = await uploadKeyInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedUdk2, true, publishedWrappedPkUid);
-      setUnwrappedUdkUid(uid);
+      try {
+        const uid = await uploadKeyInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedUdk2, true, publishedWrappedPkUid);
+        setUnwrappedUdkUid(uid);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -416,7 +457,8 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <HeadingWithCode heading="Send wrapped Decryption Key in Saas KMS" code="/src/actions/uploadKeyInPKI.ts" />
           <CodeHighlighter codeInput={code?.uploadKeyInPKI} />
           <Text>
-            <ClientOne /> sends wrapped Decryption Key in <Text as="b">SaaS KMS</Text>.
+            <ClientOne /> sends wrapped Decryption Key in <Text as="b">SaaS KMS</Text>, <ClientOne /> grants access to <ClientTwo /> for
+            this key.
           </Text>
           <Button onClick={sendWrappedUdk} width="100%" isDisabled={!wrappedUdk} colorScheme="blue" variant="outline">
             Send wrapped Decryption Key
