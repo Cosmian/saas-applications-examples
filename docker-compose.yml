@@ -1,10 +1,14 @@
 version: "3"
 services:
   backend:
-    container_name: kms_4.6.0
-    image: ghcr.io/cosmian/kms:4.6.0
+    container_name: kms_4.7.0
+    image: ghcr.io/cosmian/kms:4.7.0
     ports:
       - 9998:9998
+    container_name: kms
+    environment:
+      - KMS_JWT_ISSUER_URI=${VITE_AUTH0_DOMAIN}
+      - KMS_JWKS_URI=${VITE_AUTH0_DOMAIN}
   frontend:
     build:
       context: .
