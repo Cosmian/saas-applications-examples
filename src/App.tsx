@@ -3,7 +3,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Button, Center, Flex, Heading, Link, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import { callbacksExamplesInMemory } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import AppContext, { LanguageType } from "./AppContext";
+import AppContext, { LanguageType, SiteTitleType } from "./AppContext";
 import CoverCrypt from "./CoverCrypt";
 import Findex from "./Findex";
 import Layout from "./Layout";
@@ -15,9 +15,17 @@ const App = (): JSX.Element => {
   const [kmsToken, setKmsToken] = useState<undefined | string>();
   const [tabIndex, setTabIndex] = useState(0);
   const [language, setLanguage] = useState<LanguageType>("javascript");
+  const [siteTitle, setSiteTitle] = useState<SiteTitleType>("saas");
 
   const { isLoading, error, user, loginWithRedirect, getIdTokenClaims, logout, isAuthenticated } = useAuth0();
   const { fetchEntries, fetchChains, upsertEntries, insertChains } = callbacksExamplesInMemory();
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === "/zt" || path === "/ztrust" || path === "/zerotrust") {
+      setSiteTitle("zerotrust");
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -36,6 +44,9 @@ const App = (): JSX.Element => {
 
   const switchLanguage = (language: LanguageType): void => {
     setLanguage(language);
+  };
+  const switchSiteTitle = (title: SiteTitleType): void => {
+    setSiteTitle(title);
   };
 
   //
@@ -77,12 +88,12 @@ const App = (): JSX.Element => {
   }
 
   return (
-    <AppContext.Provider value={{ language, switchLanguage }}>
+    <AppContext.Provider value={{ language, switchLanguage, siteTitle, switchSiteTitle }}>
       <Layout>
         <Flex flexDirection={"column"} gap="8">
           {/* INTRO */}
           <Heading as="h1" size="2xl">
-            Cosmian for Saas Applications
+            {siteTitle === "saas" ? "Cosmian for Saas Applications" : "Zero Trust"}
           </Heading>
           <Text fontSize="xl">Code samples for developers.</Text>
           <Text>

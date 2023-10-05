@@ -1,5 +1,21 @@
 import { CoverCrypt, Policy } from "cloudproof_js";
 
+// const POLICY_AXIS: PolicyAxisItem[] = [
+//   {
+//     department: [
+//       { name: "Marketing", isHybridized: false },
+//       { name: "HR", isHybridized: false },
+//     ],
+//   },
+//   {
+//     country: [
+//       { name: "France", isHybridized: false },
+//       { name: "Spain", isHybridized: false },
+//       { name: "Germany", isHybridized: false },
+//     ],
+//   },
+// ];
+
 //
 // Creating a Policy
 //

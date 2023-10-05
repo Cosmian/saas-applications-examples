@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Policy } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { HeadingWithCode } from "./Layout";
+import { HeadingWithDivider } from "./Layout";
 import { KeysUid, createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
@@ -80,12 +80,14 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const [decryptionKeyInput, setDecryptionKeyInput] = useState<string | null>(null);
   const [locateKeyInput, setLocateKeyInput] = useState<string | null>(null);
   // code
-  const [code, setCode] = useState<CodeContent>();
+  const [jsCode, setjsCode] = useState<CodeContent>();
+  const [javaCode, setJavaCode] = useState<CodeContent>();
 
   const toast = useToast();
 
   useEffect(() => {
-    getTextFromFile();
+    getTextFromJsFile();
+    getTextFromJavaFile();
   }, []);
 
   useEffect(() => {
@@ -95,7 +97,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     getHealth();
   }, [kmsToken]);
 
-  const getTextFromFile = async (): Promise<void> => {
+  const getTextFromJsFile = async (): Promise<void> => {
     const tempCode: CodeContent = {};
     const files = [
       "testKmsVersion",
@@ -117,7 +119,25 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       const text = await response.text();
       tempCode[file] = text; // You can set any value you want here
     }
-    setCode(tempCode);
+    setjsCode(tempCode);
+  };
+  const getTextFromJavaFile = async (): Promise<void> => {
+    const tempCode: CodeContent = {};
+    const files = [
+      "createCovercryptKeyPair",
+      "createDecryptionKey",
+      "createPolicy",
+      "decryptDataInKms",
+      "decryptDataLocally",
+      "encryptDataInKms",
+      "encryptDataLocally",
+    ];
+    for (const file of files) {
+      const response = await fetch(`./actions/${file}.java`);
+      const text = await response.text();
+      tempCode[file] = text; // You can set any value you want here
+    }
+    setJavaCode(tempCode);
   };
 
   const toastError = (error: unknown): void => {
@@ -389,9 +409,9 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
       {kmsToken && (
         <>
-          <HeadingWithCode heading="Test KMS health with KMS version" code="/src/actions/testKmsVersion.ts" />
+          <HeadingWithDivider heading="Test KMS health with KMS version" />
           {/* TEST KMS */}
-          <CodeHighlighter codeInput={["", code?.testKmsVersion]} />
+          <CodeHighlighter codeInput={jsCode?.testKmsVersion} language="javascript" />
           <Button onClick={handleGetVersion} width="100%">
             Test KMS version
           </Button>
@@ -405,8 +425,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           {health && (
             <>
               {/* CREATE POLICY */}
-              <HeadingWithCode heading="Create policy" code="/src/actions/createPolicy.ts" />
-              <CodeHighlighter codeInput={["", code?.createPolicy]} />
+              <HeadingWithDivider heading="Create policy" />
+              <CodeHighlighter codeInput={[jsCode?.createPolicy, javaCode?.createPolicy]} />
               <Button onClick={handleCreatePolicy}>Create policy</Button>
               {policy && (
                 <>
@@ -420,9 +440,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* CREATE KEY PAIR */}
               <HeadingWithCode heading="Create Covercrypt master Key Pair" code="/src/actions/createCovercryptKeyPair.ts" />
-               <Text>The master key pair is made of a public key, that is only used to encrypt data with attributes 
-                and a master private key, that is only used to create user decryption keys.</Text>
-              <CodeHighlighter codeInput={code?.createCovercryptKeyPair} />
+              <Text>
+                The master key pair is made of a public key, that is only used to encrypt data with attributes and a master private key,
+                that is only used to create user decryption keys.
+              </Text>
+              <CodeHighlighter codeInput={[jsCode?.createCovercryptKeyPair, javaCode?.createCovercryptKeyPair]} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setCovercryptKeyInput(e.target.value)} />
                 {policy == null ? (
@@ -448,11 +470,13 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* CREATE DECRYPTION KEY */}
               <HeadingWithCode heading="Create a User Decryption Key with an access policy" code="/src/actions/createDecryptionKey.ts" />
-              <Text>A user decryption key is issued from the master private key and for a given access policy that will determine
-                its rights to decrypt some of the ciphertexts. User decryption keys have a unique fingerprint: two keys with the same
-                policy will have a different value, so they can easily be traced in case of leakage. They are anonymous too: there is 
-                no way to determine what they will decrypt, by simply looking at the key.</Text>
-              <CodeHighlighter codeInput={code?.createDecryptionKey} />
+              <Text>
+                A user decryption key is issued from the master private key and for a given access policy that will determine its rights to
+                decrypt some of the ciphertexts. User decryption keys have a unique fingerprint: two keys with the same policy will have a
+                different value, so they can easily be traced in case of leakage. They are anonymous too: there is no way to determine what
+                they will decrypt, by simply looking at the key.
+              </Text>
+              <CodeHighlighter codeInput={[jsCode?.createDecryptionKey, javaCode?.createDecryptionKey]} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setDecryptionKeyInput(e.target.value)} />
                 {policy == null ? (
@@ -480,9 +504,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* LOCATE KEYS */}
               <HeadingWithCode heading="Locate Keys by tag" code="/src/actions/locateKeysByTags.ts" />
-              <Text>Keys, like any other cryptographic objects in the Cosmian KMS server can be conveniently tagged with custom labels. 
-                These tags can then be used to locate the objects and manipulate them.</Text>
-              <CodeHighlighter codeInput={code?.locateKeysByTags} />
+              <Text>
+                Keys, like any other cryptographic objects in the Cosmian KMS server can be conveniently tagged with custom labels. These
+                tags can then be used to locate the objects and manipulate them.
+              </Text>
+              <CodeHighlighter codeInput={jsCode?.locateKeysByTags} language="javascript" />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Tags separate with commas" onChange={(e) => setLocateKeyInput(e.target.value)} />
                 <Button onClick={locateKeys} width="50%">
@@ -504,9 +530,10 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {/* ENCRYPT/DECRYPT IN BROWSER */}
               <HeadingWithCode heading="Encrypt and Decrypt data in the presentation layer" />
               <Text>
-                Encryption and decryption algorithms can be run in the presentation layer, including the browser, using the Cosmian
-                &nbsp;<i>cloudproof</i> libraries. This implementation minimizes calls to the KMS server; it does however leak the decryption key to the presentation layer.
-                The <i>cloudproof</i> libraries are available in multiple languages: Javascript, Java, Rust, Python, C/C++, Flutter, ...
+                Encryption and decryption algorithms can be run in the presentation layer, including the browser, using the Cosmian &nbsp;
+                <i>cloudproof</i> libraries. This implementation minimizes calls to the KMS server; it does however leak the decryption key
+                to the presentation layer. The <i>cloudproof</i> libraries are available in multiple languages: Javascript, Java, Rust,
+                Python, C/C++, Flutter, ...
               </Text>
               <Image
                 boxSize="100%"
@@ -519,16 +546,13 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               <Heading as="h3" size="md">
                 Encrypt
               </Heading>
-              <Code>/src/actions/encryptDataLocally.ts</Code>
-              <CodeHighlighter codeInput={code?.encryptDataLocally} />
+              <CodeHighlighter codeInput={[jsCode?.encryptDataLocally, javaCode?.encryptDataLocally]} />
               <Heading as="h3" size="md">
                 Decrypt
               </Heading>
               <Text>First, retrieve the user decryption key from the KMS.</Text>
-              <Code>/src/actions/retrieveDecryptionKey.ts</Code>
-              <CodeHighlighter codeInput={code?.retrieveDecryptionKey} />
-              <Code>/src/actions/decryptDataLocally.ts</Code>
-              <CodeHighlighter codeInput={code?.decryptDataLocally} />
+              <CodeHighlighter codeInput={[jsCode?.retrieveDecryptionKey, javaCode?.retrieveDecryptionKey]} />
+              <CodeHighlighter codeInput={[jsCode?.decryptDataLocally, javaCode?.decryptDataLocally]} />
               <ButtonGroup isAttached variant="outline" isDisabled={keyPair == null}>
                 <Button onClick={() => handleEncrypt({ browser: true })} width="50%">
                   Encrypt data in browser
@@ -549,22 +573,20 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {/* ENCRYPT/DECRYPT IN KMS */}
               <HeadingWithCode heading="Encrypt and Decrypt data in the KMS" />
               <Text>
-                The safest implementation is to call the KMS, whether on-prem or secured in the cloud, to decrypt (or encrypt) the data.
-                The key stays within the KMS and is not leaked to the presentation layer; it does however require a call to the KMS for each
-                encryption/decryption request and thus increases the load on the KMS. In order to minimize calls, 
-                the Cosmian KMS supports bulk encryption/decryption requests.
+                The safest implementation is to call the KMS, whether on-prem or secured in the cloud, to decrypt (or encrypt) the data. The
+                key stays within the KMS and is not leaked to the presentation layer; it does however require a call to the KMS for each
+                encryption/decryption request and thus increases the load on the KMS. In order to minimize calls, the Cosmian KMS supports
+                bulk encryption/decryption requests.
               </Text>
               <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={DecryptionInKMS} alt="Decryption in KMS" />
               <Heading as="h3" size="md">
                 Encrypt
               </Heading>
-              <Code>/src/actions/encryptDataInKms.ts</Code>
-              <CodeHighlighter codeInput={code?.encryptDataInKms} />
+              <CodeHighlighter codeInput={[jsCode?.encryptDataInKms, javaCode?.encryptDataInKms]} />
               <Heading as="h3" size="md">
                 Decrypt
               </Heading>
-              <Code>/src/actions/decryptDataInKms.ts</Code>
-              <CodeHighlighter codeInput={code?.decryptDataInKms} />
+              <CodeHighlighter codeInput={[jsCode?.decryptDataInKms, javaCode?.decryptDataInKms]} />
               <ButtonGroup isAttached variant="outline" isDisabled={keyPair == null}>
                 <Button onClick={() => handleEncrypt({ browser: false })} width="50%">
                   Encrypt data in KMS

@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { FetchChains, FetchEntries, FindexKey, InsertChains, Label, Location, UpsertEntries } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { HeadingWithCode } from "./Layout";
+import { HeadingWithDivider } from "./Layout";
 import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
@@ -150,9 +150,9 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* CREATE FINDEX KEY */}
-        <HeadingWithCode heading="Generate Findex key" code="/src/actions/createFindexKey.ts" />
+        <HeadingWithDivider heading="Generate Findex key" />
         <Text>Findex uses a single symmetric 128 bit key to upsert and search.</Text>
-        <CodeHighlighter codeInput={code?.createFindexKey} />
+        <CodeHighlighter codeInput={code?.createFindexKey} language="javascript" />
         <Button onClick={handleCreateFindexKey} width="100%">
           Create Findex key
         </Button>
@@ -166,12 +166,12 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* CREATE FINDEX LABEL */}
-        <HeadingWithCode heading="Labeling: salting the encryption" code="/src/actions/defineLabel.ts" />
+        <HeadingWithDivider heading="Labeling: salting the encryption" />
         <Text>
           When indexing, Findex uses an arbitrarily chosen public label; this label may represent anything, such as a period, e.g., “Q1
           2022”. Changing it regularly significantly increases the difficulty of performing statistical attacks.
         </Text>
-        <CodeHighlighter codeInput={code?.defineLabel} />
+        <CodeHighlighter codeInput={code?.defineLabel} language="javascript" />
         <Stack spacing={5} direction="row">
           <Input
             width="50%"
@@ -194,7 +194,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* DEFINE CALLBACKS*/}
-        <HeadingWithCode heading="Define callbacks" code="/src/actions/defineCallbacks.ts" />
+        <HeadingWithDivider heading="Define callbacks" />
         <Text>
           The Findex library abstracts the calls to the tables hosting the indexes. The developer is expected to provide the database’s
           backend, typically a fast key/value store, and implement the necessary code in the callbacks used by Findex. Findex uses two
@@ -203,18 +203,18 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         <Text>
           To keep it simple here, we can use in-memory tables for which default callbacks are available in <b>cloudproof_js</b>.
         </Text>
-        <CodeHighlighter codeInput={code?.defineCallbacks} />
+        <CodeHighlighter codeInput={code?.defineCallbacks} language="javascript" />
       </Stack>
 
       <Stack spacing={3}>
         {/* INDEX DATABASE */}
-        <HeadingWithCode heading="Index database" code="/src/actions/upsertData.ts" />
+        <HeadingWithDivider heading="Index database" />
         <Text>
           To perform insertions or updates (a.k.a upserts), supply an array of IndexedEntry. This structure maps an IndexedValue to a list
           of Keywords.
         </Text>
         <Text>Its definition is:</Text>
-        <CodeHighlighter codeInput={code?.upsertData} />
+        <CodeHighlighter codeInput={code?.upsertData} language="javascript" />
         <Text>In this example we will index employees’ database:</Text>
         <EmployeeTable data={employees} />
 
@@ -225,9 +225,9 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* SEARCH WORDS */}
-        <HeadingWithCode heading="Search words" code="/src/actions/searchWords.ts" />
+        <HeadingWithDivider heading="Search words" />
         <Text>Querying the index is performed using the search function.</Text>
-        <CodeHighlighter codeInput={code?.searchWords} />
+        <CodeHighlighter codeInput={code?.searchWords} language="javascript" />
         <Stack spacing={5} direction="row">
           <Input
             width="50%"

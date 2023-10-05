@@ -4,7 +4,7 @@ import { KmsObject } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ACCESS_POLICY, POLICY_AXIS } from "./CoverCrypt";
-import { ClientOne, ClientTwo, HeadingWithCode } from "./Layout";
+import { ClientOne, ClientTwo, HeadingWithDivider } from "./Layout";
 import { createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
@@ -336,7 +336,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       {health && kmsEncryptedData && kmsEncryptedData.length > 0 && (
         <>
           {/* Encrypted Table */}
-          <HeadingWithCode heading="Data encrypted under Client 1’s key" />
+          <HeadingWithDivider heading="Data encrypted under Client 1’s key" />
           <Stack spacing={3}>
             <Text>
               Say <ClientOne /> has already done these actions:
@@ -361,7 +361,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <EncryptedTable caption={"Data encrypted using Covercrypt"} data={kmsEncryptedData} colorScheme="blue" />
 
           {/* 2 - CLIENT 2: SAVE SK_2 in KMS */}
-          <HeadingWithCode heading="Save the Secret Key" code="/src/actions/uploadPemInPKI.ts" />
+          <HeadingWithDivider heading="Save the Secret Key" />
           <CodeHighlighter codeInput={code?.uploadPemInPKI} />
           <Text>
             <ClientTwo /> saves its secret key <Code colorScheme="grey">sk_2</Code> in his own KMS <Text as="b">KMS 2</Text>
@@ -379,7 +379,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 3 - CLIENT 2: PUBLISH WRAPPED Public KEY in KMS */}
-          <HeadingWithCode heading="Publish certificate" code="/src/actions/uploadPemInPKI.ts" />
+          <HeadingWithDivider heading="Publish certificate" />
           <CodeHighlighter codeInput={code?.uploadPemInPKI} />
           <Text>
             <ClientTwo /> publishes its public key <Code colorScheme="grey">pk_2</Code> wrapped in a certificate in the <Text as="b">SaaS KMS</Text>
@@ -397,7 +397,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 3-bis - CLIENT 2: GRANT GET ACCESS oon Public KEY in KMS */}
-          <HeadingWithCode heading="Grant access" code="/src/actions/grantGetKeyAccess.ts" />
+          <HeadingWithDivider heading="Grant access" />
           <CodeHighlighter codeInput={code?.grantGetKeyAccess} />
           <Text>
             <ClientTwo /> grants wildcard access for GET operation to his imported wrapped public key in <Text as="b">SaaS KMS</Text>
@@ -415,7 +415,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 4 - CLIENT 1: GET CERTIFICATE */}
-          <HeadingWithCode heading="Get certificate" code="/src/actions/fetchPKI.ts" />
+          <HeadingWithDivider heading="Get certificate" />
           <CodeHighlighter codeInput={code?.fetchPKI} />
           <Text>
             <ClientOne /> gets the certificate from the <Text as="b">SaaS KMS</Text>
@@ -436,7 +436,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 7 - CLIENT 1: RETRIEVE WRAPPED DECRYPTION KEY */}
-          <HeadingWithCode heading="Retrieve wrapped Decryption Key" code="/src/actions/fetchWrappedKey.ts" />
+          <HeadingWithDivider heading="Retrieve wrapped Decryption Key" />
           <CodeHighlighter codeInput={code?.fetchWrappedKey} />
           <Text>
             After importing in his KMS <ClientTwo />
@@ -456,7 +456,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 8 - CLIENT 1: SEND wrapped key in SaaS KMS */}
-          <HeadingWithCode heading="Send wrapped Decryption Key in Saas KMS" code="/src/actions/uploadKeyInPKI.ts" />
+          <HeadingWithDivider heading="Send wrapped Decryption Key in Saas KMS" />
           <CodeHighlighter codeInput={code?.uploadKeyInPKI} />
           <Text>
             <ClientOne /> sends wrapped Decryption Key in <Text as="b">SaaS KMS</Text>, <ClientOne /> grants access to <ClientTwo /> for
@@ -476,7 +476,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 9 - CLIENT2: Retrieve wrapped decryption key from SaaS KMS */}
-          <HeadingWithCode heading="Retrieve wrapped decryption key" code="/src/actions/fetchPKI.ts" />
+          <HeadingWithDivider heading="Retrieve wrapped decryption key" />
           <CodeHighlighter codeInput={code?.fetchPKI} />
           <Text>
             <ClientTwo /> retrieves the wrapped Decryption Key from <Text as="b">SaaS KMS</Text>.
@@ -494,7 +494,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 10 - CLIENT 2: Import in KM 2 and unwrap decryption key */}
-          <HeadingWithCode heading="Import and unwrap Decryption Key" code="/src/actions/uploadKeyInPKI.ts" />
+          <HeadingWithDivider heading="Import and unwrap Decryption Key" />
           <CodeHighlighter codeInput={code?.uploadKeyInPKI} />
           <Text>
             <ClientTwo /> imports and unwraps the decryption key <Code colorScheme="grey">Wrap(sk_a)</Code> in his KMS (<Text as="b">KMS 2</Text>).
@@ -512,7 +512,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           )}
 
           {/* 11 - CLIENT 2: DECRYPT EMPLOYEE TABLE */}
-          <HeadingWithCode heading="Decrypt Employee table" code="/src/actions/decryptDataInKms.ts" />
+          <HeadingWithDivider heading="Decrypt Employee table" />
           <CodeHighlighter codeInput={code?.decryptDataInKms} />
           <Text>
             <ClientTwo /> can decrypt the Employee table with his user decryption key, previously encrypted by <ClientOne /> using

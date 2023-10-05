@@ -5,10 +5,6 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { atelierSulphurpoolDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import AppContext from "../AppContext";
 
-type old_CodeHighlighterProps = {
-  codeInput: string | string[] | undefined | Array<string | undefined>;
-  language?: string;
-};
 type CodeHighlighterProps =
   | {
       codeInput: string[] | Array<string | undefined>;
@@ -25,13 +21,13 @@ export const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ codeInput, lan
   const [tabIndex, setTabIndex] = useState(0);
 
   useEffect(() => {
-    if (context?.language === "java") setTabIndex(0);
-    if (context?.language === "javascript") setTabIndex(1);
+    if (context?.language === "javascript") setTabIndex(0);
+    if (context?.language === "java") setTabIndex(1);
   }, [context]);
 
   const handleSwithLanguage = (index: number): void => {
     setTabIndex(index);
-    context?.switchLanguage(index === 0 ? "java" : "javascript");
+    context?.switchLanguage(index === 0 ? "javascript" : "java");
   };
 
   if (typeof codeInput === "object") {
@@ -39,16 +35,16 @@ export const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ codeInput, lan
       <>
         <Tabs variant="enclosed" size="sm" onChange={(index) => handleSwithLanguage(index)} index={tabIndex}>
           <TabList>
-            <Tab>Java</Tab>
             <Tab>Javascript</Tab>
+            <Tab>Java</Tab>
           </TabList>
 
           <TabPanels>
             <TabPanel padding={0}>
-              <Code code={codeInput[0] ? codeInput[0] : ""} language="java" />
+              <Code code={codeInput[0] ? codeInput[0] : ""} language="javascript" />
             </TabPanel>
             <TabPanel padding={0}>
-              <Code code={codeInput[1] ? codeInput[1] : ""} language="javascript" />
+              <Code code={codeInput[1] ? codeInput[1] : ""} language="java" />
             </TabPanel>
           </TabPanels>
         </Tabs>

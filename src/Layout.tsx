@@ -1,4 +1,4 @@
-import { Badge, Code, Container, Divider, Heading, VStack } from "@chakra-ui/react";
+import { Badge, Container, Divider, Heading, VStack } from "@chakra-ui/react";
 
 const Layout = ({ children }: { children: JSX.Element }): JSX.Element => {
   return (
@@ -12,15 +12,13 @@ const Layout = ({ children }: { children: JSX.Element }): JSX.Element => {
 
 export default Layout;
 
-export const HeadingWithCode: React.FC<{ heading: string; code?: string | string[] }> = ({ heading, code }) => {
+export const HeadingWithDivider: React.FC<{ heading: string }> = ({ heading }) => {
   return (
     <>
       <Divider colorScheme="blackAlpha" />
       <Heading as="h2" size="lg">
         {heading}
       </Heading>
-      {code && typeof code === "object" && code.map((item, i) => <Code key={i}>{item}</Code>)}
-      {code && typeof code === "string" && <Code>{code}</Code>}
     </>
   );
 };
