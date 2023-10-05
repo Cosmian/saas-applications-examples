@@ -13,14 +13,15 @@ const Overview: React.FC<OverviewProps> = ({ onTabChange }) => {
           Overview
         </Heading>
         <Text>
-          This interface demonstrates how Cosmian's solutions can be implemented to add <b>client-side encryption</b> to your current
-          workflows.
+          This interface provides a <b>live demo</b> and <b>code samples</b> that show you how to secure a cloud SaaS application using <b>client-side encryption</b>. 
+          You can inject the code samples directly into your existing code, or you can use this entire application as a template to build a new one. 
+          The application is open-sourced on GitHub, like the rest of Cosmian software. See the link at the top of this page.
         </Text>
 
         <Heading as="h3" size="md" mt={4}>
-          Architecture of implementations
+          Client-side encryption
         </Heading>
-        <Text>Cosmian provides code blocks that make using its technologies to implement client-side encryption easy.</Text>
+        <Text>Cosmian provides code blocks, libraries and tools that make using its technologies to implement client-side encryption easy.</Text>
         <Flex flexDirection={"row"} verticalAlign={"top"}>
             <Image
             boxSize="50%"
@@ -43,11 +44,9 @@ const Overview: React.FC<OverviewProps> = ({ onTabChange }) => {
             />
         </Flex>
 
-        <Heading as="h3" size="md" mt={4}>
-          Client-side encryption
-        </Heading>
+
         <Text>
-          With client-side encryption, content is encrypted from the customer's browser or API connector before it is transmitted to the cloud
+          With client-side encryption, content is encrypted from the customer's browser - or any API connector - before it is transmitted to the cloud
           application servers. The customer manages the encryption keys in its Key Management Service (KMS). This approach significantly reduces the attack surface, as the
           application and data layers within the zero-trust environment process only encrypted data and have no clear text access to the
           decryption keys.

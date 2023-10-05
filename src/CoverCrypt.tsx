@@ -348,7 +348,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       {/* INTRO */}
 
       <Heading as="h2" size="lg">
-        Attribute-based encryption with <em>Covercrypt</em>
+        Fast, post-quantum attribute-based encryption with <em>Covercrypt</em>
       </Heading>
       <Heading as="h3" size="md">
         Example of use: employees database
@@ -419,6 +419,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* CREATE KEY PAIR */}
               <HeadingWithCode heading="Create Covercrypt master Key Pair" code="/src/actions/createCovercryptKeyPair.ts" />
+               <Text>The master key pair is made of a public key, that is only used to encrypt data with attributes 
+                and a master private key, that is only used to create user decryption keys.</Text>
               <CodeHighlighter codeInput={code?.createCovercryptKeyPair} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setCovercryptKeyInput(e.target.value)} />
@@ -444,7 +446,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* CREATE DECRYPTION KEY */}
-              <HeadingWithCode heading="Create Decryption Key with policy access" code="/src/actions/createDecryptionKey.ts" />
+              <HeadingWithCode heading="Create a User Decryption Key with an access policy" code="/src/actions/createDecryptionKey.ts" />
+              <Text>A user decryption key is issued from the master private key and for a given access policy that will determine
+                its rights to decrypt some of the ciphertexts. User decryption keys have a unique fingerprint: two keys with the same
+                policy will have a different value, so they can easily be traced in case of leakage. bThey are anonymous too: there is 
+                no way to determine what they will decrypt, by simply looking at the key.</Text>
               <CodeHighlighter codeInput={code?.createDecryptionKey} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setDecryptionKeyInput(e.target.value)} />
@@ -473,6 +479,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
               {/* LOCATE KEYS */}
               <HeadingWithCode heading="Locate Keys by tag" code="/src/actions/locateKeysByTags.ts" />
+              <Text>Keys, like any other cryptographic objects in the Cosmian KMS server can be conveniently tagged with custom labels. 
+                These tags can then be used to locate the objects and manipulate them.</Text>
               <CodeHighlighter codeInput={code?.locateKeysByTags} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Tags separate with commas" onChange={(e) => setLocateKeyInput(e.target.value)} />
@@ -493,10 +501,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* ENCRYPT/DECRYPT IN BROWSER */}
-              <HeadingWithCode heading="Encrypt and Decrypt data in browser" />
+              <HeadingWithCode heading="Encrypt and Decrypt data in the application layer" />
               <Text>
-                The SaaS provider can implement the encryption and decryption algorithms in the presentation layer, using the Cosmian
-                libraries.
+                Encryption and decryption algorithms can be run in the presentation layer, including the browser, using the Cosmian
+                &nbsp;<i>cloudproof</i> libraries. This implementation minimizes calls to the KMS server; it does however leak the decryption key to the presentation layer.
+                The libraries are available in multiple languages: Javascript, Java, Rust, Python, C/C++, Flutter, ...
               </Text>
               <Image
                 boxSize="100%"
@@ -537,9 +546,12 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {localClearData && <EmployeeTable caption={"Decrypted in browser"} data={localClearData} />}
 
               {/* ENCRYPT/DECRYPT IN KMS */}
-              <HeadingWithCode heading="Encrypt and Decrypt data in KMS" />
+              <HeadingWithCode heading="Encrypt and Decrypt data in the KMS" />
               <Text>
-                The safest implementation is to issue calls to the KMS, whether on-prem or SaaS, to decrypt (or encrypt) the data.
+                The safest implementation is to call the KMS, whether on-prem or secured in the cloud, to decrypt (or encrypt) the data.
+                The key stays within the KMS and is not leaked to the presentation layer; it does however require a call to the KMS for each
+                encryption/decryption request and thus increases the load on the KMS. In order to minimize calls, 
+                the Cosmian KMS supports bulk encryption/decryption requests.
               </Text>
               <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={DecryptionInKMS} alt="Decryption in KMS" />
               <Heading as="h3" size="md">
