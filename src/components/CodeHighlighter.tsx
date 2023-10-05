@@ -5,10 +5,19 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { atelierSulphurpoolDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import AppContext from "../AppContext";
 
-type CodeHighlighterProps = {
+type old_CodeHighlighterProps = {
   codeInput: string | string[] | undefined | Array<string | undefined>;
   language?: string;
 };
+type CodeHighlighterProps =
+  | {
+      codeInput: string[] | Array<string | undefined>;
+      language?: null;
+    }
+  | {
+      codeInput: string | undefined;
+      language: string;
+    };
 
 export const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ codeInput, language }) => {
   const context = useContext(AppContext);
@@ -46,7 +55,18 @@ export const CodeHighlighter: React.FC<CodeHighlighterProps> = ({ codeInput, lan
       </>
     );
   } else {
-    return <Code code={codeInput ? codeInput : ""} language={language ? language : "bash"} />;
+    return (
+      <Tabs variant="enclosed" size="sm">
+        <TabList>
+          <Tab>{language ? language : "Javascript"}</Tab>
+        </TabList>
+        <TabPanels>
+          <TabPanel padding={0}>
+            <Code code={codeInput ? codeInput : ""} language={language ? language : "bash"} />
+          </TabPanel>
+        </TabPanels>
+      </Tabs>
+    );
   }
 };
 export default CodeHighlighter;
