@@ -5,10 +5,9 @@ services:
     image: ghcr.io/cosmian/kms:4.7.0
     ports:
       - 9998:9998
-    container_name: kms
     environment:
       - KMS_JWT_ISSUER_URI=${VITE_AUTH0_DOMAIN}
-      - KMS_JWKS_URI=${VITE_AUTH0_DOMAIN}
+      - KMS_JWKS_URI=${VITE_AUTH0_DOMAIN}/.well-known/jwks.json
   frontend:
     build:
       context: .
