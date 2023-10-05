@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { Policy } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { CodeHighlighter, HeadingWithCode } from "./Layout";
+import { HeadingWithCode } from "./Layout";
 import { KeysUid, createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
@@ -35,6 +35,7 @@ import DatabaseSchema from "./assets/db-schema.png";
 import DecryptionInKMS from "./assets/decryption_in_KMS.drawio.svg";
 import DecryptionInBrowser from "./assets/decryption_in_presentation_layer.drawio.svg";
 import EmployeesDatabaseImage from "./assets/employees-database.png";
+import { CodeHighlighter } from "./components/CodeHighlighter";
 import { EmployeeTable, EncryptedTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
@@ -390,7 +391,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
         <>
           <HeadingWithCode heading="Test KMS health with KMS version" code="/src/actions/testKmsVersion.ts" />
           {/* TEST KMS */}
-          <CodeHighlighter codeInput={code?.testKmsVersion} />
+          <CodeHighlighter codeInput={["", code?.testKmsVersion]} />
           <Button onClick={handleGetVersion} width="100%">
             Test KMS version
           </Button>
@@ -405,7 +406,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             <>
               {/* CREATE POLICY */}
               <HeadingWithCode heading="Create policy" code="/src/actions/createPolicy.ts" />
-              <CodeHighlighter codeInput={code?.createPolicy} />
+              <CodeHighlighter codeInput={["", code?.createPolicy]} />
               <Button onClick={handleCreatePolicy}>Create policy</Button>
               {policy && (
                 <>

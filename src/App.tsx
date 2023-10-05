@@ -3,6 +3,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Button, Center, Flex, Heading, Link, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from "@chakra-ui/react";
 import { callbacksExamplesInMemory } from "cloudproof_js";
 import { useEffect, useState } from "react";
+import AppContext, { LanguageType } from "./AppContext";
 import CoverCrypt from "./CoverCrypt";
 import Findex from "./Findex";
 import Layout from "./Layout";
@@ -13,6 +14,7 @@ import PKI from "./PKI";
 const App = (): JSX.Element => {
   const [kmsToken, setKmsToken] = useState<undefined | string>();
   const [tabIndex, setTabIndex] = useState(0);
+  const [language, setLanguage] = useState<LanguageType>("javascript");
 
   const { isLoading, error, user, loginWithRedirect, getIdTokenClaims, logout, isAuthenticated } = useAuth0();
   const { fetchEntries, fetchChains, upsertEntries, insertChains } = callbacksExamplesInMemory();
@@ -30,6 +32,10 @@ const App = (): JSX.Element => {
   const onTabChange = (tabIndex: number): void => {
     window.scrollTo(0, 0);
     setTabIndex(tabIndex);
+  };
+
+  const switchLanguage = (language: LanguageType): void => {
+    setLanguage(language);
   };
 
   //
@@ -71,52 +77,61 @@ const App = (): JSX.Element => {
   }
 
   return (
-    <Layout>
-      <Flex flexDirection={"column"} gap="8">
-        {/* INTRO */}
-        <Heading as="h1" size="2xl">
-          Cosmian for Saas Applications
-        </Heading>
-        <Text fontSize="xl">Code samples for developers.</Text>
-        <Text>
-          Check out the GitHub project repository{" "}
-          <Link
-            fontSize="md"
-            color="orange.500"
-            textDecoration="underline"
-            href="https://github.com/Cosmian/saas-applications-examples"
-            isExternal
-          >
-            https://github.com/Cosmian/saas-applications-examples <ExternalLinkIcon mx="2px" />
-          </Link>
-        </Text>
+    <AppContext.Provider value={{ language, switchLanguage }}>
+      <Layout>
+        <Flex flexDirection={"column"} gap="8">
+          {/* INTRO */}
+          <Heading as="h1" size="2xl">
+            Cosmian for Saas Applications
+          </Heading>
+          <Text fontSize="xl">Code samples for developers.</Text>
+          <Text>
+            Check out the GitHub project repository{" "}
+            <Link
+              fontSize="md"
+              color="orange.500"
+              textDecoration="underline"
+              href="https://github.com/Cosmian/saas-applications-examples"
+              isExternal
+            >
+              https://github.com/Cosmian/saas-applications-examples <ExternalLinkIcon mx="2px" />
+            </Link>
+          </Text>
 
-        <>
-          <Button onClick={handleLogout} style={{ position: "absolute", top: 20, right: 20 }}>
-            Log out
-          </Button>
-          <Tabs isLazy onChange={(index) => setTabIndex(index)} index={tabIndex}>
-            <TabList>
-              <Tab>Overview</Tab>
-              <Tab>Attribute-based encryption</Tab>
-              <Tab>Key distribution</Tab>
-              <Tab>Search on encrypted data</Tab>
-            </TabList>
+          <>
+            <Button onClick={handleLogout} style={{ position: "absolute", top: 20, right: 20 }}>
+              Log out
+            </Button>
+            <Tabs isLazy onChange={(index) => setTabIndex(index)} index={tabIndex}>
+              <TabList>
+                <Tab>Overview</Tab>
+                <Tab>Attribute-based encryption</Tab>
+                <Tab>Key distribution</Tab>
+                <Tab>Search on encrypted data</Tab>
+              </TabList>
 
-            <TabPanels marginBottom={12}>
-              <TabPanel>
-                <Overview onTabChange={onTabChange} />
-              </TabPanel>
-              <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
-              <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
-              <TabPanel>
-                {<Findex fetchEntries={fetchEntries} fetchChains={fetchChains} upsertEntries={upsertEntries} insertChains={insertChains} />}
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-        </>
-      </Flex>
-    </Layout>
+              <TabPanels marginBottom={12}>
+                <TabPanel>
+                  <Overview onTabChange={onTabChange} />
+                </TabPanel>
+                <TabPanel>{kmsToken && <CoverCrypt kmsToken={kmsToken} />}</TabPanel>
+                <TabPanel>{kmsToken && <PKI kmsToken={kmsToken} />}</TabPanel>
+                <TabPanel>
+                  {
+                    <Findex
+                      fetchEntries={fetchEntries}
+                      fetchChains={fetchChains}
+                      upsertEntries={upsertEntries}
+                      insertChains={insertChains}
+                    />
+                  }
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </>
+        </Flex>
+      </Layout>
+    </AppContext.Provider>
   );
 };
 

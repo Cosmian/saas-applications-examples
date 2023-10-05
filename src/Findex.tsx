@@ -19,12 +19,13 @@ import {
 } from "@chakra-ui/react";
 import { FetchChains, FetchEntries, FindexKey, InsertChains, Label, Location, UpsertEntries } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { CodeHighlighter, HeadingWithCode } from "./Layout";
+import { HeadingWithCode } from "./Layout";
 import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
-import FindexSchema from "./assets/findex.drawio.svg";
+import FindexSchema from "./assets/findex.svg";
+import { CodeHighlighter } from "./components/CodeHighlighter";
 import { EmployeeTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 

@@ -1,8 +1,4 @@
-import { CheckIcon } from "@chakra-ui/icons";
-import { Badge, Box, Button, Code, Container, Divider, Heading, VStack } from "@chakra-ui/react";
-import { useState } from "react";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { atelierSulphurpoolDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { Badge, Code, Container, Divider, Heading, VStack } from "@chakra-ui/react";
 
 const Layout = ({ children }: { children: JSX.Element }): JSX.Element => {
   return (
@@ -15,42 +11,6 @@ const Layout = ({ children }: { children: JSX.Element }): JSX.Element => {
 };
 
 export default Layout;
-
-export const CodeHighlighter: React.FC<{ codeInput: string | undefined; language?: string }> = ({ codeInput, language }) => {
-  const [copied, setCopied] = useState(false);
-
-  if (codeInput == null) return <></>;
-
-  const handleCopy = (): void => {
-    navigator.clipboard.writeText(codeInput);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
-  };
-  return (
-    <Box textAlign="right">
-      <Button
-        leftIcon={copied ? <CheckIcon /> : undefined}
-        size="xs"
-        colorScheme="whiteAlpha"
-        position="relative"
-        top="40px"
-        right="15px"
-        onClick={handleCopy}
-      >
-        {copied ? "Copied" : "Copy"}
-      </Button>
-      <SyntaxHighlighter
-        language={language ? language : "typescript"}
-        style={atelierSulphurpoolDark}
-        customStyle={{ textAlign: "left", padding: 20 }}
-        wrapLongLines={true}
-        showLineNumbers={false} // disable line numbers to wrap long lines
-      >
-        {codeInput}
-      </SyntaxHighlighter>
-    </Box>
-  );
-};
 
 export const HeadingWithCode: React.FC<{ heading: string; code?: string | string[] }> = ({ heading, code }) => {
   return (

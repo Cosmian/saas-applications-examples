@@ -4,7 +4,7 @@ import { KmsObject } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ACCESS_POLICY, POLICY_AXIS } from "./CoverCrypt";
-import { ClientOne, ClientTwo, CodeHighlighter, HeadingWithCode } from "./Layout";
+import { ClientOne, ClientTwo, HeadingWithCode } from "./Layout";
 import { createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
 import { createDecryptionKey } from "./actions/createDecryptionKey";
 import { createPolicy } from "./actions/createPolicy";
@@ -19,6 +19,7 @@ import { uploadKeyInPKI } from "./actions/uploadKeyInPKI";
 import { uploadPemInPKI } from "./actions/uploadPemInPKI";
 import { wrapKeyInCertificate } from "./actions/wrapKeyInCertificate";
 import PkiDrawIo from "./assets/pki.drawio.svg";
+import { CodeHighlighter } from "./components/CodeHighlighter";
 import { EmployeeTable, EncryptedTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
