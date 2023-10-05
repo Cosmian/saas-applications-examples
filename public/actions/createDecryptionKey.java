@@ -1,14 +1,10 @@
-
-//
 //
 // Create Decryption Key
 //
-String accessPolicy() throws CloudproofException {
-    return "(country::Germany) && (department::HR)";
+public static void createDecryptionKey(String kmsServerUrl, String apiKey, String privateMasterKeyUniqueIdentifier) {
+  KmsClient kmsClient = new KmsClient(kmsServerUrl, apiKey);
+  String userDecryptionKeyUniqueIdentifier = kmsClient.createCoverCryptUserDecryptionKey(
+    "(country::Germany) && (department::HR)",
+    privateMasterKeyUniqueIdentifier
+  );
 }
-
-KmsClient kmsClient = new KmsClient(kmsServerUrl, apiKey);
-String userDecryptionKeyUniqueIdentifier = kmsClient.createCoverCryptUserDecryptionKey(
-  accessPolicy(),
-  privateMasterKeyUniqueIdentifier
-);

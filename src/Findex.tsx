@@ -24,7 +24,7 @@ import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
-import FindexSchema from "./assets/findex.svg";
+import FindexSchema from "./assets/findex.drawio.svg";
 import { CodeHighlighter } from "./components/CodeHighlighter";
 import { EmployeeTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
@@ -41,20 +41,23 @@ type FindexProps = {
 };
 
 const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntries, insertChains }) => {
-  const [code, setCode] = useState<CodeContent>();
   const [findexKey, setFindexKey] = useState<undefined | FindexKey>(undefined);
   const [label, setLabel] = useState<undefined | Label>(undefined);
   const [inputLabel, setInputLabel] = useState<undefined | string>(undefined);
   const [inputWords, setInputWords] = useState<string[] | null>(null);
   const [results, setResults] = useState<Employee[] | null>(null);
+  // code
+  const [jsCode, setJsCode] = useState<CodeContent>();
+  const [javaCode, setJavaCode] = useState<CodeContent>();
 
   const toast = useToast();
 
   useEffect(() => {
-    getTextFromFile();
+    getTextFromJsFile();
+    getTextFromJavaFile();
   }, []);
 
-  const getTextFromFile = async (): Promise<void> => {
+  const getTextFromJsFile = async (): Promise<void> => {
     const tempCode: CodeContent = {};
     const files = ["createFindexKey", "defineLabel", "defineCallbacks", "upsertData", "searchWords"];
     for (const file of files) {
@@ -62,7 +65,18 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
       const text = await response.text();
       tempCode[file] = text; // You can set any value you want here
     }
-    setCode(tempCode);
+    setJsCode(tempCode);
+  };
+
+  const getTextFromJavaFile = async (): Promise<void> => {
+    const tempCode: CodeContent = {};
+    const files = ["createFindexKey", "defineLabel", "defineCallbacks", "upsertData", "searchWords"];
+    for (const file of files) {
+      const response = await fetch(`./actions/${file}.java`);
+      const text = await response.text();
+      tempCode[file] = text; // You can set any value you want here
+    }
+    setJavaCode(tempCode);
   };
 
   const toastError = (error: unknown): void => {
@@ -152,7 +166,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         {/* CREATE FINDEX KEY */}
         <HeadingWithDivider heading="Generate Findex key" />
         <Text>Findex uses a single symmetric 128 bit key to upsert and search.</Text>
-        <CodeHighlighter codeInput={code?.createFindexKey} language="javascript" />
+        <CodeHighlighter codeInput={[jsCode?.createFindexKey, javaCode?.createFindexKey]} />
         <Button onClick={handleCreateFindexKey} width="100%">
           Create Findex key
         </Button>
@@ -171,7 +185,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           When indexing, Findex uses an arbitrarily chosen public label; this label may represent anything, such as a period, e.g., “Q1
           2022”. Changing it regularly significantly increases the difficulty of performing statistical attacks.
         </Text>
-        <CodeHighlighter codeInput={code?.defineLabel} language="javascript" />
+        <CodeHighlighter codeInput={[jsCode?.defineLabel, javaCode?.defineLabel]} />
         <Stack spacing={5} direction="row">
           <Input
             width="50%"
@@ -203,7 +217,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         <Text>
           To keep it simple here, we can use in-memory tables for which default callbacks are available in <b>cloudproof_js</b>.
         </Text>
-        <CodeHighlighter codeInput={code?.defineCallbacks} language="javascript" />
+        <CodeHighlighter codeInput={[jsCode?.defineCallbacks, javaCode?.defineCallbacks]} />
       </Stack>
 
       <Stack spacing={3}>
@@ -214,7 +228,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
           of Keywords.
         </Text>
         <Text>Its definition is:</Text>
-        <CodeHighlighter codeInput={code?.upsertData} language="javascript" />
+        <CodeHighlighter codeInput={[jsCode?.upsertData, javaCode?.upsertData]} />
         <Text>In this example we will index employees’ database:</Text>
         <EmployeeTable data={employees} />
 
@@ -227,7 +241,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         {/* SEARCH WORDS */}
         <HeadingWithDivider heading="Search words" />
         <Text>Querying the index is performed using the search function.</Text>
-        <CodeHighlighter codeInput={code?.searchWords} language="javascript" />
+        <CodeHighlighter codeInput={[jsCode?.searchWords, javaCode?.searchWords]} />
         <Stack spacing={5} direction="row">
           <Input
             width="50%"

@@ -411,7 +411,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
         <>
           <HeadingWithDivider heading="Test KMS health with KMS version" />
           {/* TEST KMS */}
-          <CodeHighlighter codeInput={jsCode?.testKmsVersion} language="javascript" />
+          <CodeHighlighter codeInput={jsCode?.testKmsVersion} language="Javascript" />
           <Button onClick={handleGetVersion} width="100%">
             Test KMS version
           </Button>
@@ -439,7 +439,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* CREATE KEY PAIR */}
-              <HeadingWithCode heading="Create Covercrypt master Key Pair" code="/src/actions/createCovercryptKeyPair.ts" />
+              <HeadingWithDivider heading="Create Covercrypt master Key Pair" />
               <Text>
                 The master key pair is made of a public key, that is only used to encrypt data with attributes and a master private key,
                 that is only used to create user decryption keys.
@@ -469,7 +469,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* CREATE DECRYPTION KEY */}
-              <HeadingWithCode heading="Create a User Decryption Key with an access policy" code="/src/actions/createDecryptionKey.ts" />
+              <HeadingWithDivider heading="Create a User Decryption Key with an access policy" />
               <Text>
                 A user decryption key is issued from the master private key and for a given access policy that will determine its rights to
                 decrypt some of the ciphertexts. User decryption keys have a unique fingerprint: two keys with the same policy will have a
@@ -503,12 +503,12 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* LOCATE KEYS */}
-              <HeadingWithCode heading="Locate Keys by tag" code="/src/actions/locateKeysByTags.ts" />
+              <HeadingWithDivider heading="Locate Keys by tag" />
               <Text>
                 Keys, like any other cryptographic objects in the Cosmian KMS server can be conveniently tagged with custom labels. These
                 tags can then be used to locate the objects and manipulate them.
               </Text>
-              <CodeHighlighter codeInput={jsCode?.locateKeysByTags} language="javascript" />
+              <CodeHighlighter codeInput={jsCode?.locateKeysByTags} language="Javascript" />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Tags separate with commas" onChange={(e) => setLocateKeyInput(e.target.value)} />
                 <Button onClick={locateKeys} width="50%">
@@ -528,7 +528,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* ENCRYPT/DECRYPT IN BROWSER */}
-              <HeadingWithCode heading="Encrypt and Decrypt data in the presentation layer" />
+              <HeadingWithDivider heading="Encrypt and Decrypt data in the presentation layer" />
               <Text>
                 Encryption and decryption algorithms can be run in the presentation layer, including the browser, using the Cosmian &nbsp;
                 <i>cloudproof</i> libraries. This implementation minimizes calls to the KMS server; it does however leak the decryption key
@@ -571,7 +571,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {localClearData && <EmployeeTable caption={"Decrypted in browser"} data={localClearData} />}
 
               {/* ENCRYPT/DECRYPT IN KMS */}
-              <HeadingWithCode heading="Encrypt and Decrypt data in the KMS" />
+              <HeadingWithDivider heading="Encrypt and Decrypt data in the KMS" />
               <Text>
                 The safest implementation is to call the KMS, whether on-prem or secured in the cloud, to decrypt (or encrypt) the data. The
                 key stays within the KMS and is not leaked to the presentation layer; it does however require a call to the KMS for each

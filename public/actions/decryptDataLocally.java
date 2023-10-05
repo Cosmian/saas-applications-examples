@@ -1,4 +1,6 @@
 //
 // Decrypt data locally
 //
-DecryptedData plaintext = CoverCrypt.decrypt(userDecryptionKey, ciphertext, Optional.of(uid));
+public static void decryptDataLocally(byte[] userDecryptionKey, byte[] ciphertext) {
+  String plaintext = CoverCrypt.decrypt(userDecryptionKey, ciphertext, Optional.of(uid));
+}
