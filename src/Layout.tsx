@@ -83,9 +83,9 @@ export const ClientBadge: React.FC<{ client: 1 | 2 | undefined; children: JSX.El
   );
 };
 
-export const ClientOne = () => {
+export const ClientOne = (): JSX.Element => {
   return <ClientBadge client={1}>Client 1</ClientBadge>;
 };
-export const ClientTwo = () => {
+export const ClientTwo = (): JSX.Element => {
   return <ClientBadge client={2}>Client 2</ClientBadge>;
 };
