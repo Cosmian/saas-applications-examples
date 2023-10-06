@@ -66,12 +66,12 @@ export const HeadingWithCode: React.FC<{ heading: string; code?: string | string
 };
 
 export const ClientBadge: React.FC<{ client: 1 | 2 | undefined; children: JSX.Element | string }> = ({ client, children }) => {
-  const getColor = (): "blue" | "green" | undefined => {
+  const getColor = (): "blue" | "red" | undefined => {
     switch (client) {
       case 1:
         return "blue";
       case 2:
-        return "green";
+        return "red";
       default:
         return undefined;
     }
