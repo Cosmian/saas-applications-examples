@@ -16,3 +16,19 @@ export const createPolicy = async (axis: PolicyAxisItem[]): Promise<Policy> => {
   const policy = new Policy(policyAxis);
   return policy;
 };
+
+const POLICY_AXIS_EXAMPLE: PolicyAxisItem[] = [
+  {
+    department: [
+      { name: "Marketing", isHybridized: false },
+      { name: "HR", isHybridized: false },
+    ],
+  },
+  {
+    country: [
+      { name: "France", isHybridized: false },
+      { name: "Spain", isHybridized: false },
+      { name: "Germany", isHybridized: false },
+    ],
+  },
+];

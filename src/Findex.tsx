@@ -19,12 +19,13 @@ import {
 } from "@chakra-ui/react";
 import { FetchChains, FetchEntries, FindexKey, InsertChains, Label, Location, UpsertEntries } from "cloudproof_js";
 import { useEffect, useState } from "react";
-import { CodeHighlighter, HeadingWithCode } from "./Layout";
+import { HeadingWithDivider } from "./Layout";
 import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
 import FindexSchema from "./assets/findex.drawio.svg";
+import { CodeHighlighter } from "./components/CodeHighlighter";
 import { EmployeeTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
@@ -40,20 +41,23 @@ type FindexProps = {
 };
 
 const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntries, insertChains }) => {
-  const [code, setCode] = useState<CodeContent>();
   const [findexKey, setFindexKey] = useState<undefined | FindexKey>(undefined);
   const [label, setLabel] = useState<undefined | Label>(undefined);
   const [inputLabel, setInputLabel] = useState<undefined | string>(undefined);
   const [inputWords, setInputWords] = useState<string[] | null>(null);
   const [results, setResults] = useState<Employee[] | null>(null);
+  // code
+  const [jsCode, setJsCode] = useState<CodeContent>();
+  const [javaCode, setJavaCode] = useState<CodeContent>();
 
   const toast = useToast();
 
   useEffect(() => {
-    getTextFromFile();
+    getTextFromJsFile();
+    getTextFromJavaFile();
   }, []);
 
-  const getTextFromFile = async (): Promise<void> => {
+  const getTextFromJsFile = async (): Promise<void> => {
     const tempCode: CodeContent = {};
     const files = ["createFindexKey", "defineLabel", "defineCallbacks", "upsertData", "searchWords"];
     for (const file of files) {
@@ -61,7 +65,18 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
       const text = await response.text();
       tempCode[file] = text; // You can set any value you want here
     }
-    setCode(tempCode);
+    setJsCode(tempCode);
+  };
+
+  const getTextFromJavaFile = async (): Promise<void> => {
+    const tempCode: CodeContent = {};
+    const files = ["createFindexKey", "defineLabel", "defineCallbacks", "upsertData", "searchWords"];
+    for (const file of files) {
+      const response = await fetch(`./actions/${file}.java`);
+      const text = await response.text();
+      tempCode[file] = text; // You can set any value you want here
+    }
+    setJavaCode(tempCode);
   };
 
   const toastError = (error: unknown): void => {
@@ -149,9 +164,9 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* CREATE FINDEX KEY */}
-        <HeadingWithCode heading="Generate Findex key" code="/src/actions/createFindexKey.ts" />
+        <HeadingWithDivider heading="Generate Findex key" />
         <Text>Findex uses a single symmetric 128 bit key to upsert and search.</Text>
-        <CodeHighlighter codeInput={code?.createFindexKey} />
+        <CodeHighlighter codeInput={[jsCode?.createFindexKey, javaCode?.createFindexKey]} />
         <Button onClick={handleCreateFindexKey} width="100%">
           Create Findex key
         </Button>
@@ -165,12 +180,12 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* CREATE FINDEX LABEL */}
-        <HeadingWithCode heading="Labeling: salting the encryption" code="/src/actions/defineLabel.ts" />
+        <HeadingWithDivider heading="Labeling: salting the encryption" />
         <Text>
           When indexing, Findex uses an arbitrarily chosen public label; this label may represent anything, such as a period, e.g., “Q1
           2022”. Changing it regularly significantly increases the difficulty of performing statistical attacks.
         </Text>
-        <CodeHighlighter codeInput={code?.defineLabel} />
+        <CodeHighlighter codeInput={[jsCode?.defineLabel, javaCode?.defineLabel]} />
         <Stack spacing={5} direction="row">
           <Input
             width="50%"
@@ -193,7 +208,7 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* DEFINE CALLBACKS*/}
-        <HeadingWithCode heading="Define callbacks" code="/src/actions/defineCallbacks.ts" />
+        <HeadingWithDivider heading="Define callbacks" />
         <Text>
           The Findex library abstracts the calls to the tables hosting the indexes. The developer is expected to provide the database’s
           backend, typically a fast key/value store, and implement the necessary code in the callbacks used by Findex. Findex uses two
@@ -202,18 +217,18 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
         <Text>
           To keep it simple here, we can use in-memory tables for which default callbacks are available in <b>cloudproof_js</b>.
         </Text>
-        <CodeHighlighter codeInput={code?.defineCallbacks} />
+        <CodeHighlighter codeInput={[jsCode?.defineCallbacks, javaCode?.defineCallbacks]} />
       </Stack>
 
       <Stack spacing={3}>
         {/* INDEX DATABASE */}
-        <HeadingWithCode heading="Index database" code="/src/actions/upsertData.ts" />
+        <HeadingWithDivider heading="Index database" />
         <Text>
           To perform insertions or updates (a.k.a upserts), supply an array of IndexedEntry. This structure maps an IndexedValue to a list
           of Keywords.
         </Text>
         <Text>Its definition is:</Text>
-        <CodeHighlighter codeInput={code?.upsertData} />
+        <CodeHighlighter codeInput={[jsCode?.upsertData, javaCode?.upsertData]} />
         <Text>In this example we will index employees’ database:</Text>
         <EmployeeTable data={employees} />
 
@@ -224,9 +239,9 @@ const Findex: React.FC<FindexProps> = ({ fetchEntries, fetchChains, upsertEntrie
 
       <Stack spacing={3}>
         {/* SEARCH WORDS */}
-        <HeadingWithCode heading="Search words" code="/src/actions/searchWords.ts" />
+        <HeadingWithDivider heading="Search words" />
         <Text>Querying the index is performed using the search function.</Text>
-        <CodeHighlighter codeInput={code?.searchWords} />
+        <CodeHighlighter codeInput={[jsCode?.searchWords, javaCode?.searchWords]} />
         <Stack spacing={5} direction="row">
           <Input
             width="50%"
