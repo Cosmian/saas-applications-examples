@@ -449,7 +449,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               <HeadingWithCode heading="Create a User Decryption Key with an access policy" code="/src/actions/createDecryptionKey.ts" />
               <Text>A user decryption key is issued from the master private key and for a given access policy that will determine
                 its rights to decrypt some of the ciphertexts. User decryption keys have a unique fingerprint: two keys with the same
-                policy will have a different value, so they can easily be traced in case of leakage. bThey are anonymous too: there is 
+                policy will have a different value, so they can easily be traced in case of leakage. They are anonymous too: there is 
                 no way to determine what they will decrypt, by simply looking at the key.</Text>
               <CodeHighlighter codeInput={code?.createDecryptionKey} />
               <Stack spacing={5} direction="row">
@@ -501,11 +501,11 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               )}
 
               {/* ENCRYPT/DECRYPT IN BROWSER */}
-              <HeadingWithCode heading="Encrypt and Decrypt data in the application layer" />
+              <HeadingWithCode heading="Encrypt and Decrypt data in the presentation layer" />
               <Text>
                 Encryption and decryption algorithms can be run in the presentation layer, including the browser, using the Cosmian
                 &nbsp;<i>cloudproof</i> libraries. This implementation minimizes calls to the KMS server; it does however leak the decryption key to the presentation layer.
-                The libraries are available in multiple languages: Javascript, Java, Rust, Python, C/C++, Flutter, ...
+                The <i>cloudproof</i> libraries are available in multiple languages: Javascript, Java, Rust, Python, C/C++, Flutter, ...
               </Text>
               <Image
                 boxSize="100%"

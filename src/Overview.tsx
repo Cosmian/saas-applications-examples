@@ -22,20 +22,19 @@ const Overview: React.FC<OverviewProps> = ({ onTabChange }) => {
           Client-side encryption
         </Heading>
         <Text>Cosmian provides code blocks, libraries and tools that make using its technologies to implement client-side encryption easy.</Text>
-        <Flex flexDirection={"row"} verticalAlign={"top"}>
+        <Flex flexDirection={"column"}>
             <Image
-            boxSize="50%"
-            maxWidth={450}
+            boxSize="100%"
+            maxWidth={800}
             alignSelf={"center"}
             objectFit="cover"
             src={ClientSideEncryption}
             alt="Employees database schema"
             my={6}
             />
-            <div style={{width: "15px"}}></div>
             <Image
-            boxSize="50%"
-            maxWidth={450}
+            boxSize="100%"
+            maxWidth={800}
             alignSelf={"center"}
             objectFit="cover"
             src={ClientSideDecryption}
@@ -100,8 +99,8 @@ const Overview: React.FC<OverviewProps> = ({ onTabChange }) => {
           </ul>
           Cosmian solutions are transparent to the application layer software, so they do not require a rewrite and can be quickly and easily deployed.
           <br/>
-          <Link color="orange.500" onClick={() => {}}>
-            → ask us for a demo and details
+          <Link color="orange.500" href="https://meetings-eu1.hubspot.com/meetings/pierre-cabannes">
+            → ask us for details and a demo
           </Link>
         </Text>
       </Stack>
