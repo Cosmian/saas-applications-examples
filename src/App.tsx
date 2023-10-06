@@ -93,7 +93,7 @@ const App = (): JSX.Element => {
         <Flex flexDirection={"column"} gap="8">
           {/* INTRO */}
           <Heading as="h1" size="2xl">
-            {siteTitle === "saas" ? "Cosmian for Saas Applications" : "Zero Trust"}
+            {siteTitle === "saas" ? "Cosmian for Saas Applications" : "Cosmian Zero Trust"}
           </Heading>
           <Text fontSize="xl">Live demo and Code samples for developers.</Text>
           <Text>
