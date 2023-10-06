@@ -24,7 +24,7 @@ import { createFindexKey } from "./actions/createFindexKey";
 import { defineLabel } from "./actions/defineLabel";
 import { searchWords } from "./actions/searchWords";
 import { upsertData } from "./actions/upsertData";
-import FindexSchema from "./assets/findex.svg";
+import FindexSchema from "./assets/findex.drawio.svg";
 import { EmployeeTable } from "./components/Table";
 import { Employee, employees } from "./utils/employees";
 
