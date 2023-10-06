@@ -131,6 +131,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       "decryptDataLocally",
       "encryptDataInKms",
       "encryptDataLocally",
+      "retrieveDecryptionKey",
     ];
     for (const file of files) {
       const response = await fetch(`./actions/${file}.java`);
@@ -437,7 +438,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                   <CodeHighlighter codeInput={JSON.stringify(POLICY_AXIS, undefined, 2)} language={"json"} />
                 </>
               )}
-
               {/* CREATE KEY PAIR */}
               <HeadingWithDivider heading="Create Covercrypt master Key Pair" />
               <Text>
@@ -467,7 +467,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                   </ListItem>
                 </UnorderedList>
               )}
-
               {/* CREATE DECRYPTION KEY */}
               <HeadingWithDivider heading="Create a User Decryption Key with an access policy" />
               <Text>
@@ -476,11 +475,14 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                 different value, so they can easily be traced in case of leakage. They are anonymous too: there is no way to determine what
                 they will decrypt, by simply looking at the key.
               </Text>
+              <Text>
+                Access policy: <Code>{ACCESS_POLICY}</Code>
+              </Text>
               <CodeHighlighter codeInput={[jsCode?.createDecryptionKey, javaCode?.createDecryptionKey]} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setDecryptionKeyInput(e.target.value)} />
-                {policy == null ? (
-                  <Tooltip label="Create policy first">
+                {policy == null || keyPair === undefined ? (
+                  <Tooltip label="Create policy and master key pair first">
                     <Button onClick={handleCreateDecryptionKey} isDisabled width="50%">
                       Create decryption key
                     </Button>
@@ -501,7 +503,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                   </ListItem>
                 </UnorderedList>
               )}
-
               {/* LOCATE KEYS */}
               <HeadingWithDivider heading="Locate Keys by tag" />
               <Text>
@@ -526,7 +527,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                   </Stack>
                 </Flex>
               )}
-
               {/* ENCRYPT/DECRYPT IN BROWSER */}
               <HeadingWithDivider heading="Encrypt and Decrypt data in the presentation layer" />
               <Text>
@@ -569,7 +569,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                 <EncryptedTable caption={"Encrypted in browser"} data={localEncryptedData} />
               )}
               {localClearData && <EmployeeTable caption={"Decrypted in browser"} data={localClearData} />}
-
               {/* ENCRYPT/DECRYPT IN KMS */}
               <HeadingWithDivider heading="Encrypt and Decrypt data in the KMS" />
               <Text>
@@ -595,7 +594,6 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
                   Decrypt data in KMS
                 </Button>
               </ButtonGroup>
-
               {kmsEncryptedData && kmsEncryptedData.length > 0 && <EncryptedTable caption={"Encrypted in KMS"} data={kmsEncryptedData} />}
               {kmsClearData && <EmployeeTable caption={"Decrypted in KMS"} data={kmsClearData} />}
             </>

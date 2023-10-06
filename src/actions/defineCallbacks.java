@@ -1,5 +1,5 @@
 //
-// Define your callbacks or use basic in memory examples
+// Define your callbacks
 //
 
 /**

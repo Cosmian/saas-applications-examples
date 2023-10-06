@@ -1,17 +1,19 @@
 import { Auth0Provider, Auth0ProviderOptions } from "@auth0/auth0-react";
+import { ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./main.css";
 import { auth0_config } from "./utils/config.ts";
 
-import { ChakraProvider, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
-
+let redirect_uri = window.location.origin;
+if (window.location.pathname === "/zt" || window.location.pathname === "/ztrust" || window.location.pathname === "/zerotrust")
+  redirect_uri = window.location.origin + window.location.pathname;
 const providerConfig: Auth0ProviderOptions = {
   domain: auth0_config.domain,
   clientId: auth0_config.client,
   authorizationParams: {
-    redirect_uri: window.location.origin,
+    redirect_uri: redirect_uri,
   },
 };
 

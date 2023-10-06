@@ -386,8 +386,8 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <HeadingWithDivider heading="Publish certificate" />
           <CodeHighlighter codeInput={code?.uploadPemInPKI} language={"Javascript"} />
           <Text>
-            <ClientTwo /> publishes its public key <Code colorScheme="grey">pk_2</Code> wrapped in a certificate in the{" "}
-            <Text as="b">SaaS KMS</Text>
+            <ClientTwo /> publishes its public key <Code colorScheme="grey">pk_2</Code> wrapped in a certificate in{" "}
+            <Text as="b">Cosmian KMS</Text>
           </Text>
           <Button onClick={publishWrappedPK} width="100%" isDisabled={!savedSk2} colorScheme="green" variant="outline">
             Publish certificate
@@ -396,7 +396,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             <>
               <Center gap="2">
                 <CheckCircleIcon color="green.500" />
-                OK. Wrapped public key <Code colorScheme="grey">pk_2</Code> has been published in SaaS KMS under uid:{" "}
+                OK. Wrapped public key <Code colorScheme="grey">pk_2</Code> has been published in Cosmian KMS under uid:{" "}
                 <Code colorScheme="grey">{publishedWrappedPkUid}</Code>
               </Center>
             </>
@@ -406,7 +406,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
           <HeadingWithDivider heading="Grant access" />
           <CodeHighlighter codeInput={code?.grantGetKeyAccess} language={"Javascript"} />
           <Text>
-            <ClientTwo /> grants wildcard access for GET operation to his imported wrapped public key in <Text as="b">SaaS KMS</Text>
+            <ClientTwo /> grants wildcard access for GET operation to his imported wrapped public key in <Text as="b">Cosmian KMS</Text>
           </Text>
           <Button onClick={grantAccessGetPk} width="100%" isDisabled={!publishedWrappedPkUid} colorScheme="green" variant="outline">
             Grant access
@@ -415,16 +415,16 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             <>
               <Center gap="2">
                 <CheckCircleIcon color="green.500" />
-                OK. Access has been granted on <Code colorScheme="grey">pk_2</Code> in SaaS KMS for GET operation
+                OK. Access has been granted on <Code colorScheme="grey">pk_2</Code> in Cosmian KMS for GET operation
               </Center>
             </>
           )}
 
           {/* 4 - CLIENT 1: GET CERTIFICATE */}
           <HeadingWithDivider heading="Get certificate" />
-          <CodeHighlighter codeInput={code?.fetchPKI} />
+          <CodeHighlighter codeInput={code?.fetchPKI} language={"Javascript"} />
           <Text>
-            <ClientOne /> gets the certificate from the <Text as="b">SaaS KMS</Text>
+            <ClientOne /> gets the certificate from the <Text as="b">Cosmian KMS</Text>
           </Text>
           <Button onClick={getCertificateFromPki} width="100%" isDisabled={!accessGranted} colorScheme="blue" variant="outline">
             Get certificate
@@ -433,7 +433,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             <>
               <Center gap="2">
                 <CheckCircleIcon color="green.500" />
-                OK. Certificate downloaded from SaaS KMS and save under uid: <Code colorScheme="grey">{certificateUid}</Code>.
+                OK. Certificate downloaded from Cosmian KMS and save under uid: <Code colorScheme="grey">{certificateUid}</Code>.
               </Center>
               {certificate.type === "Certificate" && (
                 <Center gap="2">{utf8decoder.decode(certificate.value.certificateValue as Uint8Array)}</Center>
@@ -461,11 +461,11 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             </>
           )}
 
-          {/* 8 - CLIENT 1: SEND wrapped key in SaaS KMS */}
-          <HeadingWithDivider heading="Send wrapped Decryption Key in Saas KMS" />
+          {/* 8 - CLIENT 1: SEND wrapped key in Cosmian KMS */}
+          <HeadingWithDivider heading="Send wrapped Decryption Key in Cosmian KMS" />
           <CodeHighlighter codeInput={code?.uploadKeyInPKI} language={"Javascript"} />
           <Text>
-            <ClientOne /> sends wrapped Decryption Key in <Text as="b">SaaS KMS</Text>, <ClientOne /> grants access to <ClientTwo /> for
+            <ClientOne /> sends wrapped Decryption Key in <Text as="b">Cosmian KMS</Text>, <ClientOne /> grants access to <ClientTwo /> for
             this key.
           </Text>
           <Button onClick={sendWrappedUdk} width="100%" isDisabled={!wrappedUdk} colorScheme="blue" variant="outline">
@@ -475,18 +475,18 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
             <>
               <Center gap="2">
                 <CheckCircleIcon color="green.500" />
-                OK. Wrapped Decryption key <Code colorScheme="grey">Wrap(sk_a)</Code> has been saved in SaaS KMS under uid:{" "}
+                OK. Wrapped Decryption key <Code colorScheme="grey">Wrap(sk_a)</Code> has been saved in Cosmian KMS under uid:{" "}
                 <Code colorScheme="grey">{wrappedUdkUid}</Code>.
               </Center>
               <Center>Access has also been granted for GET operation for this key.</Center>
             </>
           )}
 
-          {/* 9 - CLIENT2: Retrieve wrapped decryption key from SaaS KMS */}
+          {/* 9 - CLIENT2: Retrieve wrapped decryption key from Cosmian KMS */}
           <HeadingWithDivider heading="Retrieve wrapped decryption key" />
           <CodeHighlighter codeInput={code?.fetchPKI} language={"javascript"} />
           <Text>
-            <ClientTwo /> retrieves the wrapped Decryption Key from <Text as="b">SaaS KMS</Text>.
+            <ClientTwo /> retrieves the wrapped Decryption Key from <Text as="b">Cosmian KMS</Text>.
           </Text>
           <Button onClick={retrieveWrappedUdkFromKMS} width="100%" isDisabled={!wrappedUdkUid} colorScheme="green" variant="outline">
             Retrieve wrapped Decryption Key
