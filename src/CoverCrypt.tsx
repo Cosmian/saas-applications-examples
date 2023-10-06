@@ -441,8 +441,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               {/* CREATE KEY PAIR */}
               <HeadingWithDivider heading="Create Covercrypt master Key Pair" />
               <Text>
-                The master key pair is made of a public key, that is only used to encrypt data with attributes and a master private key,
-                that is only used to create user decryption keys.
+                The master key pair is made of a public key, which is only used to encrypt data with attributes and a master private key,
+                which is only used to create user decryption keys.
               </Text>
               <CodeHighlighter codeInput={[jsCode?.createCovercryptKeyPair, javaCode?.createCovercryptKeyPair]} />
               <Stack spacing={5} direction="row">
@@ -481,7 +481,7 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
               <CodeHighlighter codeInput={[jsCode?.createDecryptionKey, javaCode?.createDecryptionKey]} />
               <Stack spacing={5} direction="row">
                 <Input placeholder="Add tags separate with commas" onChange={(e) => setDecryptionKeyInput(e.target.value)} />
-                {policy == null || keyPair === undefined ? (
+                {policy == null || keyPair == null ? (
                   <Tooltip label="Create policy and master key pair first">
                     <Button onClick={handleCreateDecryptionKey} isDisabled width="50%">
                       Create decryption key
