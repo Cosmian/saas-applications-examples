@@ -27,7 +27,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ loginWithRedirect }) => {
             fontWeight={"bold"}
             lineHeight="1em"
           >
-            Cosmian for SaaS Applications
+            Cosmian client-side encryption
           </Text>
           <Text fontSize="3xl" color="white" fontFamily={"Montserrat, Helvetica, Arial, sans-serif"} fontWeight="semibold">
             Architecture diagrams and developer code examples
