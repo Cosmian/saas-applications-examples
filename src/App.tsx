@@ -95,7 +95,9 @@ const App = (): JSX.Element => {
           <Heading as="h1" size="2xl">
             {siteTitle === "saas" ? "Cosmian for Saas Applications" : "Cosmian Zero Trust"}
           </Heading>
-          <Text fontSize="xl">Live demo and Code samples for developers.</Text>
+          <Heading as="h2" size="md" mt={4}>
+            Post-quantum resistance for your SaaS Applications.
+          </Heading>
           <Text>
             Check out the GitHub project repository{" "}
             <Link
