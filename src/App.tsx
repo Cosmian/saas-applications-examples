@@ -109,6 +109,11 @@ const App = (): JSX.Element => {
             >
               https://github.com/Cosmian/saas-applications-examples <ExternalLinkIcon mx="2px" />
             </Link>
+            <br />
+            Cosmian official documentation{" "}
+            <Link fontSize="md" color="orange.500" textDecoration="underline" href="https://docs.cosmian.com" isExternal>
+              https://docs.cosmian.com <ExternalLinkIcon mx="2px" />
+            </Link>
           </Text>
 
           <>
