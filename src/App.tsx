@@ -4,6 +4,7 @@ import { Button, Center, Flex, Heading, Link, Spinner, Tab, TabList, TabPanel, T
 import { callbacksExamplesInMemory } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import AppContext, { LanguageType, SiteTitleType } from "./AppContext";
+import ConfidentialVm from "./ConfidentialVm";
 import CoverCrypt from "./CoverCrypt";
 import Findex from "./Findex";
 import Layout from "./Layout";
@@ -126,6 +127,7 @@ const App = (): JSX.Element => {
                 <Tab>Attribute-based encryption</Tab>
                 <Tab>Key distribution</Tab>
                 <Tab>Search on encrypted data</Tab>
+                <Tab>Confidential VM</Tab>
               </TabList>
 
               <TabPanels marginBottom={12}>
@@ -143,6 +145,9 @@ const App = (): JSX.Element => {
                       insertChains={insertChains}
                     />
                   }
+                </TabPanel>
+                <TabPanel>
+                  <ConfidentialVm />
                 </TabPanel>
               </TabPanels>
             </Tabs>
