@@ -41,7 +41,7 @@ const ConfidentialVm: React.FC = () => {
         </Heading>
         <Text>Cosmian verification process is performed by the Admin sys, requesting on the running confidential VM, and checks:</Text>
         <UnorderedList>
-          <ListItem ml={8}>IMA measurement list (containing the list of executable file's hash digest)</ListItem>
+          <ListItem ml={8}>IMA measurement list (containing the list of executed file's hash digest)</ListItem>
           <ListItem ml={8}>
             TEE (Trusted Execution Environment) elements to provide assurance that the code is running on secure and confidential hardware
           </ListItem>
