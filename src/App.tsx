@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import AppContext, { LanguageType, SiteTitleType } from "./AppContext";
 import ConfidentialVm from "./ConfidentialVm";
 import CoverCrypt from "./CoverCrypt";
+import CseExample from "./CseExample";
 import Findex from "./Findex";
 import Layout from "./Layout";
 import LoginPage from "./LoginPage";
@@ -128,6 +129,7 @@ const App = (): JSX.Element => {
                 <Tab>Key distribution</Tab>
                 <Tab>Search on encrypted data</Tab>
                 <Tab>Confidential VM</Tab>
+                <Tab>CSE example</Tab>
               </TabList>
 
               <TabPanels marginBottom={12}>
@@ -149,6 +151,7 @@ const App = (): JSX.Element => {
                 <TabPanel>
                   <ConfidentialVm />
                 </TabPanel>
+                <TabPanel>{kmsToken && <CseExample kmsToken={kmsToken} />}</TabPanel>
               </TabPanels>
             </Tabs>
           </>

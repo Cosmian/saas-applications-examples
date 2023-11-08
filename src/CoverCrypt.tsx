@@ -55,7 +55,7 @@ export const POLICY_AXIS: PolicyAxisItem[] = [
   },
 ];
 
-export const ACCESS_POLICY = "(country::Germany) && (department::HR)";
+export const ACCESS_POLICY = "(country::Germany) && (department::Marketing)";
 
 type CodeContent = {
   [key: string]: string;
