@@ -7,7 +7,7 @@ import { BACKEND_URL } from "./actions/backendConfig";
 import { createSymmetricKey } from "./actions/createSymmetricKey";
 import { decryptWithAes } from "./actions/decryptWithAes";
 import { sendEncryptedDocument } from "./actions/sendEncryptedDocument";
-import CseExampleFlow from "./assets/cse_google_architecture.drawio.svg";
+import CseExampleFlow from "./assets/cse_google_architecture.drawio.png";
 import CodeHighlighter from "./components/CodeHighlighter";
 
 type CodeContent = {
