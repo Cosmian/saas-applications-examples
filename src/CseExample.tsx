@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, CheckCircleIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { Button, Code, Divider, Flex, Heading, Image, Link, Stack, Text, Textarea, useToast } from "@chakra-ui/react";
 import { KMIPOperations, KmsClient } from "cloudproof_js";
 import aes from "js-crypto-aes";
@@ -142,8 +142,14 @@ const CseExample: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       <CodeHighlighter codeInput={jsCode?.sendEncryptedDocument} language={"Javascript"} />
       <Text as="b">Text to summarize:</Text>
       <Textarea value={textInput} onChange={handleTextInput} size="m" height="150px" borderRadius="10" p="5" />
-      <Button onClick={handleSendEncryptedDocument} width="100%" isDisabled={!symmetricKeyUid}>
-        Encrypt and send document
+      <Button
+        onClick={handleSendEncryptedDocument}
+        width="100%"
+        isDisabled={!symmetricKeyUid}
+        isLoading={encryptedSummary === undefined && encryptedTextInput !== undefined}
+        leftIcon={encryptedSummary ? <CheckCircleIcon /> : <ArrowForwardIcon />}
+      >
+        {!encryptedTextInput ? "Encrypt and send document" : "Summary is ready"}
       </Button>
       {encryptedTextInput && (
         <>
@@ -163,7 +169,7 @@ const CseExample: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
         <Text size="m">{encryptedSummary}</Text>
       ) : (
         <Text as="i" ml="10">
-          Summarize in progress
+          Waiting for summary
         </Text>
       )}
       <Button onClick={handleDecryptSummary} width="100%" isDisabled={!encryptedSummary}>
