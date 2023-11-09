@@ -7,7 +7,7 @@ import { BACKEND_URL } from "./actions/backendConfig";
 import { createSymmetricKey } from "./actions/createSymmetricKey";
 import { decryptWithAes } from "./actions/decryptWithAes";
 import { sendEncryptedDocument } from "./actions/sendEncryptedDocument";
-import CseExampleFlow from "./assets/cse_google_architecture.drawio.png";
+import CseExampleFlow from "./assets/cse_google_architecture.drawio.svg";
 import CodeHighlighter from "./components/CodeHighlighter";
 
 type CodeContent = {
@@ -138,7 +138,9 @@ const CseExample: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       <Heading as="h3" size="md">
         Encrypt and send document
       </Heading>{" "}
-      <Text>Document is encrypted using aes and sent to the microservice in order to summarize it.</Text>
+      <Text>
+        Document is encrypted using aes and sent to the microservice in order to summarize it (using flan-t5 model running on TEE).
+      </Text>
       <CodeHighlighter codeInput={jsCode?.sendEncryptedDocument} language={"Javascript"} />
       <Text as="b">Text to summarize:</Text>
       <Textarea value={textInput} onChange={handleTextInput} size="m" height="150px" borderRadius="10" p="5" />
