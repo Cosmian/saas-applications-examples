@@ -1,6 +1,6 @@
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { Button, Center, Code, Flex, Heading, Image, ListItem, OrderedList, Stack, Text, UnorderedList, useToast } from "@chakra-ui/react";
-import { KmsObject } from "cloudproof_js";
+import { KmsObject, PolicyKms } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ACCESS_POLICY, POLICY_AXIS } from "./CoverCrypt";
@@ -15,8 +15,8 @@ import { fetchWrappedKey } from "./actions/fetchWrappedKey";
 import { grantGetKeyAccess } from "./actions/grantGetKeyAccess";
 import { getKmsVersion } from "./actions/testKmsVersion";
 import { EncryptedResult } from "./actions/types";
+import { uploadDerInPKI } from "./actions/uploadDerInPKI";
 import { uploadKeyInPKI } from "./actions/uploadKeyInPKI";
-import { uploadPemInPKI } from "./actions/uploadPemInPKI";
 import { wrapKeyInCertificate } from "./actions/wrapKeyInCertificate";
 import PkiDrawIo from "./assets/pki.drawio.svg";
 import { CodeHighlighter } from "./components/CodeHighlighter";
@@ -90,7 +90,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     const files = [
       "fetchPKI",
       "fetchWrappedKey",
-      "uploadPemInPKI",
+      "uploadDerInPKI",
       "uploadKeyInPKI",
       "wrapKeyInCertificate",
       "decryptDataInKms",
@@ -108,7 +108,8 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
     try {
       // generate policy + key pair
       const policy = await createPolicy(POLICY_AXIS);
-      const keyPair = await createCovercryptKeyPair(kmsToken, policy);
+      const bytesPolicy: PolicyKms = new PolicyKms(policy.toBytes());
+      const keyPair = await createCovercryptKeyPair(kmsToken, bytesPolicy);
       // generate decryption key
       const decryptionKey = await createDecryptionKey(kmsToken, keyPair.masterSecretKeyUId, ACCESS_POLICY);
       setClientOneUdkUid(decryptionKey);
@@ -150,7 +151,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const saveSk2 = async (): Promise<void> => {
     if (wrappedPk2) {
       try {
-        const savedSk2Uid = await uploadPemInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.privateKeyBytes);
+        const savedSk2Uid = await uploadDerInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.privateKeyBytes);
         setSavedSk2(savedSk2Uid);
       } catch (error) {
         toastError(error);
@@ -162,7 +163,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
   const publishWrappedPK = async (): Promise<void> => {
     if (wrappedPk2) {
       try {
-        const wrappedPkCertUid = await uploadPemInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.certBytes);
+        const wrappedPkCertUid = await uploadDerInPKI(CLIENT_2_TOKEN, uuidv4(), wrappedPk2.certBytes);
         setPublisheWrappedPkUid(wrappedPkCertUid);
       } catch (error) {
         toastError(error);
@@ -190,7 +191,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
         setCertificate(kmsObject);
         // Then save certificate in KMS
         if (kmsObject.type === "Certificate") {
-          const uid = await uploadPemInPKI(kmsToken, uuidv4(), kmsObject.value.certificateValue);
+          const uid = await uploadDerInPKI(kmsToken, uuidv4(), kmsObject.value.certificateValue);
           setCertificateUid(uid);
         }
       } catch (error) {
@@ -366,7 +367,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
           {/* 2 - CLIENT 2: SAVE SK_2 in KMS */}
           <HeadingWithDivider heading="Save the Secret Key" />
-          <CodeHighlighter codeInput={code?.uploadPemInPKI} language={"Javascript"} />
+          <CodeHighlighter codeInput={code?.uploadDerInPKI} language={"Javascript"} />
           <Text>
             <ClientTwo /> saves its secret key <Code colorScheme="grey">sk_2</Code> in his own KMS <Text as="b">KMS 2</Text>
           </Text>
@@ -384,7 +385,7 @@ const PKI: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
 
           {/* 3 - CLIENT 2: PUBLISH WRAPPED Public KEY in KMS */}
           <HeadingWithDivider heading="Publish certificate" />
-          <CodeHighlighter codeInput={code?.uploadPemInPKI} language={"Javascript"} />
+          <CodeHighlighter codeInput={code?.uploadDerInPKI} language={"Javascript"} />
           <Text>
             <ClientTwo /> publishes its public key <Code colorScheme="grey">pk_2</Code> wrapped in a certificate in{" "}
             <Text as="b">Cosmian KMS</Text>

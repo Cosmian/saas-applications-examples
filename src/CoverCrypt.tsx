@@ -16,7 +16,7 @@ import {
   UnorderedList,
   useToast,
 } from "@chakra-ui/react";
-import { Policy } from "cloudproof_js";
+import { Policy, PolicyKms } from "cloudproof_js";
 import { useEffect, useState } from "react";
 import { HeadingWithDivider } from "./Layout";
 import { KeysUid, createCovercryptKeyPair } from "./actions/createCovercryptKeyPair";
@@ -175,7 +175,8 @@ const CoverCrypt: React.FC<{ kmsToken: string }> = ({ kmsToken }) => {
       if (policy) {
         let tags: string[] | undefined;
         if (covercryptKeyInput) tags = covercryptKeyInput.replace(/ /g, "").split(",");
-        setKeyPair(await createCovercryptKeyPair(kmsToken, policy, tags));
+        const bytesPolicy: PolicyKms = new PolicyKms(policy.toBytes());
+        setKeyPair(await createCovercryptKeyPair(kmsToken, bytesPolicy, tags));
       }
     } catch (error) {
       toastError(error);
