@@ -13,7 +13,7 @@ export const sendEncryptedDocument = async (
   formData.append("key_id", keyUid);
   formData.append("nonce", btoa(String.fromCodePoint(...iv)));
   formData.append("encrypted_doc", new Blob([encryptedText]), "text.doc");
-  const response = await fetch(`${MSE_APP_URL}/summarize`, {
+  const response = await fetch(`${MSE_APP_URL}/kms_summarize`, {
     method: "POST",
     body: formData,
   });
