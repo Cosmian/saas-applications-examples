@@ -32,7 +32,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ loginWithRedirect }) => {
           <Text fontSize="3xl" color="white" fontFamily={"Montserrat, Helvetica, Arial, sans-serif"} fontWeight="semibold">
             Architecture diagrams and developer code examples
           </Text>
-          <Button onClick={loginWithRedirect}>Create an account or login with Auth0</Button>
+          <Button onClick={loginWithRedirect}>Create an account or login</Button>
         </Box>
       </Box>
     </Box>

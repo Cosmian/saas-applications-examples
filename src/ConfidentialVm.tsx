@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Heading, Image, ListItem, Stack, Text, UnorderedList } from "@chakra-ui/react";
+import { AspectRatio, Button, Divider, Flex, Heading, Image, ListItem, Stack, Text, UnorderedList } from "@chakra-ui/react";
 import { useState } from "react";
 import Step1 from "./assets/confidential_vm/01-helloworld.png";
 import Step2 from "./assets/confidential_vm/02-helloworld-hash.png";
@@ -32,7 +32,7 @@ const ConfidentialVm: React.FC = () => {
             <b>No binary modification:</b> the application doesn’t need any third party library or any specific adaptation
           </ListItem>
           <ListItem ml={8}>
-            <b>Simplicity is gold:</b> reduce at its maximum the number of manual actions the user has to do to spawn a Cosmian VM
+            <b>Simplicity is gold:</b> reduce at its minimum the number of manual actions the user has to do to spawn a Cosmian VM
           </ListItem>
           <ListItem ml={8}>
             <b>Confidentiality:</b> the application runs in a Trusted Execution Environment (encrypted memory)
@@ -83,8 +83,9 @@ const ConfidentialVm: React.FC = () => {
         </Text>
         <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step1} alt="step 1" my={2} />
         <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step2} alt="step 2" my={2} />
-        <Button onClick={() => setStep(4)} width="100%">
-          Once the VM instantiated, the administrator can start its application
+        <Text>Once the VM instantiated, the administrator can start its application:</Text>
+        <Button onClick={() => setStep(4)} width="100%" alignSelf={"center"}>
+          Start the application
         </Button>
         {step > 2 && (
           <>
@@ -101,13 +102,13 @@ const ConfidentialVm: React.FC = () => {
               This agent can be queried from a CLI running on another standard machine. Once the <b>Cosmian VM</b> is set and completely
               configured, a snapshot is computed.
               <br />
-              From now, any modificiation on that VM is seen as malicious.{" "}
+              From now on, any modificiation on that VM is seen as malicious.{" "}
             </Text>
             <Button
               isDisabled={step < 4}
               onClick={async () => {
                 setStep(5);
-                await new Promise((r) => setTimeout(r, 2000));
+                await new Promise((r) => setTimeout(r, 1000));
                 setStep(6);
               }}
               width="100%"
@@ -128,8 +129,8 @@ const ConfidentialVm: React.FC = () => {
                   Verify the trustworthiness of the Cosmian VM
                 </Heading>
                 <Text>
-                  On a regular basis, the administrator can proceed a verification of the <b>Cosmian VM</b> using the CLI and the previous
-                  computed snapshot.
+                  On a regular basis, the administrator can proceed with a verification of the <b>Cosmian VM</b> using the CLI and the
+                  previous computed snapshot.
                   <br /> The integrity of the VM content is verified.
                   <br />
                   Also, the CLI checks that the VM is still a SEV AMD VM and checks the TPM used to attest the verification of the VM
@@ -171,6 +172,22 @@ const ConfidentialVm: React.FC = () => {
             )}
           </>
         )}
+        <Heading as="h3" size="md" mt={10}>
+          Application example: confidential LLM chat
+        </Heading>
+        <Text>
+          In this example we put an LLM model inside a <b>Cosmian VM</b> : the model and users queries are fully protected.
+        </Text>
+        <AspectRatio>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/EDEtiXIylxc?si=yse2lQVGdPyKEGrl"
+            title="Confidential llm"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+        </AspectRatio>
       </Stack>
     </Flex>
   );
