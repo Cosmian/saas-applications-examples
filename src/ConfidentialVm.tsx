@@ -81,97 +81,158 @@ const ConfidentialVm: React.FC = () => {
           environment and we will use the product <b>Cosmian VM</b>. <br />
           In this example, the application has been released on github and its hash has been computed during the release flow.{" "}
         </Text>
-        <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step1} alt="step 1" my={2} />
-        <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step2} alt="step 2" my={2} />
+        <Image boxSize="100%" maxWidth={1000} alignSelf={"center"} objectFit="cover" src={Step1} alt="step 1" my={2} />
+        <Image boxSize="100%" maxWidth={1000} alignSelf={"center"} objectFit="cover" src={Step2} alt="step 2" my={2} />
         <Text>Once the VM instantiated, the administrator can start its application:</Text>
         <Button onClick={() => setStep(4)} width="100%" alignSelf={"center"}>
           Start the application
         </Button>
-        {step > 2 && (
-          <>
-            <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step3} alt="step 3" my={2} />
-            <Text>
-              On this same VM, an agent belonging to the <b>Cosmian VM</b> is also executed (as a linux service):
-            </Text>
-            <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step4} alt="step 4" my={2} />
-            <Divider />
-            <Heading as="h4" size="sm" mt={2}>
-              Snapshot the Cosmian VM
-            </Heading>
-            <Text>
-              This agent can be queried from a CLI running on another standard machine. Once the <b>Cosmian VM</b> is set and completely
-              configured, a snapshot is computed.
-              <br />
-              From now on, any modificiation on that VM is seen as malicious.{" "}
-            </Text>
-            <Button
-              isDisabled={step < 4}
-              onClick={async () => {
-                setStep(5);
-                await new Promise((r) => setTimeout(r, 1000));
-                setStep(6);
-              }}
-              width="100%"
-            >
-              Snapshot the VM
-            </Button>
-            {step === 5 && <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step5} alt="step 5" my={2} />}
-            {step > 5 && (
-              <>
-                <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step6} alt="step 6" my={2} />
-                <Heading as="h4" size="sm" mt={2}>
-                  Audit the snapshot (optional)
-                </Heading>
-                <Text>Inside the snapshot, the administrator retrieves its application and its exact digest:</Text>
-                <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step7} alt="step 7" my={2} />
-                <Divider />
-                <Heading as="h4" size="sm" mt={2}>
-                  Verify the trustworthiness of the Cosmian VM
-                </Heading>
-                <Text>
-                  On a regular basis, the administrator can proceed with a verification of the <b>Cosmian VM</b> using the CLI and the
-                  previous computed snapshot.
-                  <br /> The integrity of the VM content is verified.
-                  <br />
-                  Also, the CLI checks that the VM is still a SEV AMD VM and checks the TPM used to attest the verification of the VM
-                  integrity.
-                </Text>
-                <Button
-                  onClick={() => setStep(8)}
-                  width="100%"
-                  isDisabled={step < 6}
-                  leftIcon={step < 8 ? <ArrowForwardIcon /> : <CheckCircleIcon />}
-                >
-                  {step < 8 ? "Verify the VM integrity" : "Integrity checked"}
-                </Button>
-                {step > 7 && (
-                  <>
-                    <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step8} alt="step 8" my={2} />
-                    <Divider />
-                    <Heading as="h4" size="sm" mt={2}>
-                      Detect malicious activities
-                    </Heading>
-                    <Text>
-                      Let’s say an attacker writes a malicious script and executes it on the <b>Cosmian VM</b>:
-                    </Text>
-                    <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step9} alt="step 9" my={2} />
-                    <Button
-                      onClick={() => setStep(10)}
-                      width="100%"
-                      isDisabled={step < 8}
-                      leftIcon={step < 10 ? <ArrowForwardIcon /> : <WarningIcon />}
-                    >
-                      {step < 10 ? "Verify the VM integrity" : "Integrity check failed !"}
-                    </Button>
-                    {step > 9 && (
-                      <Image boxSize="100%" maxWidth={800} alignSelf={"center"} objectFit="cover" src={Step10} alt="step 10" my={2} />
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </>
+        <Image
+          boxSize="100%"
+          maxWidth={800}
+          alignSelf={"center"}
+          objectFit="cover"
+          src={Step3}
+          alt="step 3"
+          my={2}
+          opacity={step < 4 ? 0.2 : 1}
+        />
+        <Text>
+          On this same VM, an agent belonging to the <b>Cosmian VM</b> is also executed (as a linux service):
+        </Text>
+        <Image
+          boxSize="100%"
+          maxWidth={800}
+          alignSelf={"center"}
+          objectFit="cover"
+          src={Step4}
+          alt="step 4"
+          my={2}
+          opacity={step < 4 ? 0.2 : 1}
+        />
+        <Divider />
+        <Heading as="h4" size="sm" mt={2}>
+          Snapshot the Cosmian VM
+        </Heading>
+        <Text>
+          This agent can be queried from a CLI running on another standard machine. Once the <b>Cosmian VM</b> is set and completely
+          configured, a snapshot is computed.
+          <br />
+          From now on, any modificiation on that VM is seen as malicious.{" "}
+        </Text>
+        <Button
+          isDisabled={step < 4}
+          onClick={async () => {
+            setStep(5);
+            await new Promise((r) => setTimeout(r, 2000));
+            setStep(6);
+          }}
+          width="100%"
+        >
+          Snapshot the VM
+        </Button>
+        {step < 6 && (
+          <Image
+            boxSize="100%"
+            maxWidth={800}
+            alignSelf={"center"}
+            objectFit="cover"
+            src={Step5}
+            alt="step 5"
+            my={2}
+            opacity={step < 5 ? 0.2 : 1}
+          />
         )}
+        {step > 5 && (
+          <Image
+            boxSize="100%"
+            maxWidth={800}
+            alignSelf={"center"}
+            objectFit="cover"
+            src={Step6}
+            alt="step 6"
+            my={2}
+            opacity={step < 6 ? 0.2 : 1}
+          />
+        )}
+        <Heading as="h4" size="sm" mt={2}>
+          Audit the snapshot (optional)
+        </Heading>
+        <Text>Inside the snapshot, the administrator retrieves its application and its exact digest:</Text>
+        <Image
+          boxSize="100%"
+          maxWidth={800}
+          alignSelf={"center"}
+          objectFit="cover"
+          src={Step7}
+          alt="step 7"
+          my={2}
+          opacity={step < 6 ? 0.2 : 1}
+        />
+        <Divider />
+        <Heading as="h4" size="sm" mt={2}>
+          Verify the trustworthiness of the Cosmian VM
+        </Heading>
+        <Text>
+          On a regular basis, the administrator can proceed with a verification of the <b>Cosmian VM</b> using the CLI and the previous
+          computed snapshot.
+          <br /> The integrity of the VM content is verified.
+          <br />
+          Also, the CLI checks that the VM is still a SEV AMD VM and checks the TPM used to attest the verification of the VM integrity.
+        </Text>
+        <Button
+          onClick={() => setStep(8)}
+          width="100%"
+          isDisabled={step < 6}
+          leftIcon={step < 8 ? <ArrowForwardIcon /> : <CheckCircleIcon />}
+        >
+          {step < 8 ? "Verify the VM integrity" : "Integrity checked"}
+        </Button>
+        <Image
+          boxSize="100%"
+          maxWidth={800}
+          alignSelf={"center"}
+          objectFit="cover"
+          src={Step8}
+          alt="step 8"
+          my={2}
+          opacity={step < 8 ? 0.2 : 1}
+        />
+        <Divider />
+        <Heading as="h4" size="sm" mt={2}>
+          Detect malicious activities
+        </Heading>
+        <Text>
+          Let’s say an attacker writes a malicious script and executes it on the <b>Cosmian VM</b>:
+        </Text>
+        <Image
+          boxSize="100%"
+          maxWidth={800}
+          alignSelf={"center"}
+          objectFit="cover"
+          src={Step9}
+          alt="step 9"
+          my={2}
+          opacity={step < 8 ? 0.2 : 1}
+        />
+        <Button
+          onClick={() => setStep(10)}
+          width="100%"
+          isDisabled={step < 8}
+          leftIcon={step < 10 ? <ArrowForwardIcon /> : <WarningIcon />}
+        >
+          {step < 10 ? "Verify the VM integrity" : "Integrity check failed !"}
+        </Button>
+        <Image
+          boxSize="100%"
+          maxWidth={800}
+          alignSelf={"center"}
+          objectFit="cover"
+          src={Step10}
+          alt="step 10"
+          my={2}
+          opacity={step < 9 ? 0.2 : 1}
+        />
         <Heading as="h3" size="md" mt={10}>
           Application example: confidential LLM chat
         </Heading>
